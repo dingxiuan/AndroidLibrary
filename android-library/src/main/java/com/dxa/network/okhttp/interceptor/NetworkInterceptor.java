@@ -45,11 +45,20 @@ public class NetworkInterceptor implements Interceptor {
             info.setMediaType(body != null ? body.contentType() : null);
 
             if (body != null && body instanceof MultipartBody) {
+                StringBuilder builder = new StringBuilder();
                 MultipartBody multipartBody = (MultipartBody) body;
                 List<MultipartBody.Part> parts = multipartBody.parts();
+                builder.append("MultipartBody: [ ");
                 for (MultipartBody.Part part : parts) {
-
+                    RequestBody fileBody = part.body();
+                    long length = fileBody.contentLength();
+                    MediaType mediaType = fileBody.contentType();
+                    builder.append("Length: ").append(length);
+                    builder.append("MediaType: ").append(mediaType);
+                    builder.append("; \t");
                 }
+                builder.append("]");
+                info.setMultipart(builder.toString());
             }
 
             Headers headers = request.headers();
@@ -121,6 +130,10 @@ public class NetworkInterceptor implements Interceptor {
          * 请求头
          */
         private HashMap<String, String> headers = new HashMap<>();
+        /**
+         * 多请求体的信息
+         */
+        private String multipart;
 
 
         public RequestInfo(Request request) {
@@ -195,6 +208,14 @@ public class NetworkInterceptor implements Interceptor {
             this.headers = headers;
         }
 
+        public String getMultipart() {
+            return multipart;
+        }
+
+        public void setMultipart(String multipart) {
+            this.multipart = multipart;
+        }
+
         @Override
         public String toString() {
             return new StringBuilder()
@@ -205,6 +226,7 @@ public class NetworkInterceptor implements Interceptor {
                     .append("\nmedia-type: ").append(get(mediaType))
                     .append("\nqueries: ").append(get(queries))
                     .append("\nheaders: ").append(get(headers))
+                    .append("\nmultipart: ").append(get(multipart))
                     .toString();
         }
 
