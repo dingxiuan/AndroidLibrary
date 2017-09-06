@@ -54,7 +54,7 @@ public class NetworkInterceptor implements Interceptor {
                     long length = fileBody.contentLength();
                     MediaType mediaType = fileBody.contentType();
                     builder.append("Length: ").append(length);
-                    builder.append("MediaType: ").append(mediaType);
+                    builder.append(", MediaType: ").append(mediaType);
                     builder.append("; \t");
                 }
                 builder.append("]");
