@@ -1,4 +1,4 @@
-package com.dxa.network.rxjava;
+package com.dxa.network.rxjava2;
 
 /**
  * 携带对象

@@ -3,7 +3,6 @@ package com.dxa.network.retrofit;
 
 import com.dxa.network.okhttp.interceptor.NetworkInterceptor;
 
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import retrofit2.CallAdapter;
 import retrofit2.Converter;
@@ -36,10 +35,10 @@ public abstract class RetrofitRequest<ServiceApi> implements IRetrofitRequest<Se
         Converter.Factory converterFactory = getConverterFactory();
         CallAdapter.Factory adapterFactory = getCallAdapterFactory();
         Retrofit retrofit = new Retrofit.Builder()
-                .addCallAdapterFactory(adapterFactory)
-                .addConverterFactory(converterFactory)
                 .baseUrl(getBaseUrl())
                 .client(getOkHttpClient())
+                .addCallAdapterFactory(adapterFactory)
+                .addConverterFactory(converterFactory)
                 .build();
         serviceApi = retrofit.create(clazz);
     }
@@ -65,7 +64,7 @@ public abstract class RetrofitRequest<ServiceApi> implements IRetrofitRequest<Se
     public abstract OkHttpClient getOkHttpClient();
 
     @Override
-    public Interceptor getNetworkInterceptor() {
+    public NetworkInterceptor getNetworkInterceptor() {
         return new NetworkInterceptor();
     }
 
@@ -74,4 +73,5 @@ public abstract class RetrofitRequest<ServiceApi> implements IRetrofitRequest<Se
 
     @Override
     public abstract CallAdapter.Factory getCallAdapterFactory();
+
 }

@@ -1,8 +1,9 @@
 package com.dxa.network.retrofit;
 
 
+import com.dxa.network.okhttp.interceptor.NetworkInterceptor;
+
 import io.reactivex.annotations.Nullable;
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import retrofit2.CallAdapter;
 import retrofit2.Converter;
@@ -28,7 +29,7 @@ public interface IRetrofitRequest<ServiceApi> {
      * 创建网络请求的拦截器
      */
     @Nullable
-    Interceptor getNetworkInterceptor();
+    NetworkInterceptor getNetworkInterceptor();
 
     /**
      * 创建Converter.Factory的实现类对象，如 {@link GsonConverterFactory#create()}

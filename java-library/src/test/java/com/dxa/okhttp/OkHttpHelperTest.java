@@ -24,13 +24,6 @@ import okhttp3.ResponseBody;
  * 测试OkHttp的工具类
  */
 public class OkHttpHelperTest implements ProgressListener/*, Interceptor*/ {
-    public static void main(String[] args) {
-        try {
-            new OkHttpHelperTest().uploadFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     @Override
     public void onUpdateProgress(long bytesLength, long contentLength, boolean done) {
@@ -75,4 +68,32 @@ public class OkHttpHelperTest implements ProgressListener/*, Interceptor*/ {
         }
     }
 
+    @Test
+    public void testRegister() throws IOException {
+        Request request = new Request.Builder()
+                .url("http://192.168.10.25:8099/heart/appheart/wblogin?name=丁修安233&phone=18317720854&gender=1&age=26&id_code=41092619921008447X")
+                .get()
+                .build();
+        NetworkInterceptor interceptor = new NetworkInterceptor();
+        NetworkInterceptor.NetworkListener listener = new NetworkInterceptor.NetworkListener() {
+            @Override
+            public void onRequest(NetworkInterceptor.RequestInfo requestInfo) {
+                System.out.println(requestInfo.toString());
+            }
+        };
+        interceptor.addListener(listener);
+        OkHttpClient client = new OkHttpClientBuilder()
+                .addResponseProgressListener(this)
+                .addNetworkInterceptor(interceptor)
+                .build();
+        Call call = client.newCall(request);
+        Response response = call.execute();
+        ResponseBody body = response.body();
+        if (body != null) {
+            String result = body.string();
+            System.out.println(result);
+        } else {
+            System.out.println("请求体为 null");
+        }
+    }
 }
