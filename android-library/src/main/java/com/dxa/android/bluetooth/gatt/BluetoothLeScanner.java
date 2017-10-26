@@ -1,4 +1,4 @@
-package com.dxa.android.bluetooth.le;
+package com.dxa.android.bluetooth.gatt;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -13,8 +13,9 @@ public final class BluetoothLeScanner {
     private static final long MINUTE = 60 * SECOND;
     private static final long HOUR = 60 * MINUTE;
 
+    private final Object lock = new Object();
     private final Handler handler = new Handler();
-    private BLeScanListener listener;
+    private final BLeScanListener listener;
     private boolean isScanning = false;
 
     private final BluetoothAdapter.LeScanCallback leScanCallback =
@@ -162,12 +163,7 @@ public final class BluetoothLeScanner {
     }
 
     public static class BLeScanException extends Exception {
-        /**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-
-		public BLeScanException() {
+        public BLeScanException() {
             super("蓝牙不可用!");
         }
     }
