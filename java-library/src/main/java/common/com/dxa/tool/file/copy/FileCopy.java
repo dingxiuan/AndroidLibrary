@@ -162,14 +162,5 @@ public class FileCopy {
 		CUT // 剪切
 	}
 	
-//	public static void main(String[] args) {
-//	int bufferSize = 1024 << 10;
-//	File oldDirectory = new File("E:/Temp3");
-//	File newDirectory = new File("E:/Temp");
-//	newDirectory.mkdirs();
-//	System.out.println("剪切开始: "+ System.currentTimeMillis());
-//	boolean b = operate(OperateType.CUT, oldDirectory, newDirectory, bufferSize);
-//	System.out.println("剪切结束: "+ System.currentTimeMillis() +"\n结果: "+ b);
-//}
 
 }

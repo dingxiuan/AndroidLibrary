@@ -28,7 +28,7 @@ public class Checker {
 		}
 		
 		for (Object o : os) {
-			if (isNull(o))
+			if (o == null)
 				return true;
 		}
 		return false;
@@ -50,7 +50,7 @@ public class Checker {
 		}
 		
 		for (Object o : os) {
-			if (isNull(o))
+			if (o == null)
 				return false;
 		}
 		return true;
@@ -228,7 +228,6 @@ public class Checker {
 	/**
 	 * 要求存在
 	 * @param f 文件
-	 * @param errorMsg 错误信息
 	 */
 	public static void requiredExist(File f) {
 		requiredExist(f, "File must exist !");

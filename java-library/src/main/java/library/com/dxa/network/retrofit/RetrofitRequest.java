@@ -32,15 +32,17 @@ public abstract class RetrofitRequest<ServiceApi> implements IRetrofitRequest<Se
     }
 
     private void requiredInit() {
-        Converter.Factory converterFactory = getConverterFactory();
-        CallAdapter.Factory adapterFactory = getCallAdapterFactory();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(getBaseUrl())
-                .client(getOkHttpClient())
-                .addCallAdapterFactory(adapterFactory)
-                .addConverterFactory(converterFactory)
-                .build();
-        serviceApi = retrofit.create(clazz);
+        synchronized (this){
+            Converter.Factory converterFactory = getConverterFactory();
+            CallAdapter.Factory adapterFactory = getCallAdapterFactory();
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(getBaseUrl())
+                    .client(getOkHttpClient())
+                    .addCallAdapterFactory(adapterFactory)
+                    .addConverterFactory(converterFactory)
+                    .build();
+            serviceApi = retrofit.create(clazz);
+        }
     }
 
     /**

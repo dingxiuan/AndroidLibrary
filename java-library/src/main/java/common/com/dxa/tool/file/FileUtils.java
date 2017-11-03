@@ -210,8 +210,11 @@ public final class FileUtils {
      * 关闭流
      */
     public static void close(Closeable... cs) {
-        if (cs != null && cs.length > 0) {
-            for (Closeable c : cs) {
+        if (cs == null || cs.length == 0)
+            return;
+
+        for (Closeable c : cs) {
+            if (c != null){
                 try {
                     c.close();
                 } catch (IOException e) {
