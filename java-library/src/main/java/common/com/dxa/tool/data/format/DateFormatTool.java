@@ -1,6 +1,7 @@
-package com.dxa.utils.data.format;
+package com.dxa.tool.data.format;
 
-import com.dxa.utils.check.Checker;
+
+import com.dxa.tool.check.Checker;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

@@ -1,4 +1,4 @@
-package com.dxa.utils.image;
+package com.dxa.tool.image;
 
 import java.awt.Color;
 import java.awt.Font;

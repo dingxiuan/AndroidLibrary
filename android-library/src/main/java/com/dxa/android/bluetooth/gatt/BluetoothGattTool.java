@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -346,6 +347,16 @@ public class BluetoothGattTool {
     }
 
     /**
+     * 设置特征值改变时的提醒
+     */
+    public static boolean setCharacteristicNotification(
+            BluetoothGatt gatt, UUID serviceUUID, UUID characteristicUUID, boolean enable) {
+        BluetoothGattCharacteristic characteristic =
+                getGattCharacteristic(gatt, serviceUUID, characteristicUUID);
+        return setCharacteristicNotification(gatt, characteristic, enable);
+    }
+
+    /**
      * 设置描述符的值
      * {@link BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE}
      * {@link BluetoothGattDescriptor.ENABLE_INDICATION_VALUE}
@@ -355,6 +366,25 @@ public class BluetoothGattTool {
                                              BluetoothGattDescriptor descriptor,
                                              byte[] value) {
         return nonNull(gatt, descriptor) && descriptor.setValue(value);
+    }
+
+    public static boolean notification(
+            BluetoothGatt gatt, UUID serviceUUID, UUID characteristicUUID) {
+        BluetoothGattService service = gatt.getService(serviceUUID);
+        if (service != null) {
+            BluetoothGattCharacteristic characteristic = service.getCharacteristic(characteristicUUID);
+            if (characteristic != null) {
+                gatt.setCharacteristicNotification(characteristic, true);
+                // 适配部分机型
+                gatt.readCharacteristic(characteristic);
+                for (BluetoothGattDescriptor descriptor : characteristic.getDescriptors()) {
+                    BluetoothGattTool.writeDescriptorValue(
+                            gatt, descriptor, BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+                }
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -396,6 +426,55 @@ public class BluetoothGattTool {
         return characteristic != null
                 && characteristic.setValue(value)
                 && gatt.writeCharacteristic(characteristic);
+    }
+
+
+    /**
+     * 打印BluetoothGattService的信息
+     */
+    public static void printGattInfo(List<BluetoothGattService> getServices, String tag) {
+        StringBuilder builder = new StringBuilder();
+        int sIndex = 0;
+        for (BluetoothGattService service : getServices) {
+            sIndex++;
+            Log.e(tag, "\n-------- start -------- " + sIndex + " ------------------------");
+            builder.append("Service uuid: ").append(service.getUuid().toString());
+            builder.append("; type: ").append(service.getType());
+            Log.i(tag, builder.toString());
+            builder.setLength(0);
+
+            int cIndex = 0;
+            Log.w(tag, "==>: characteristic ----> START");
+            for (BluetoothGattCharacteristic characteristic : service.getCharacteristics()) {
+                cIndex++;
+                builder.append(cIndex).append("、characteristic ");
+                builder.append("uuid: ").append(characteristic.getUuid());
+                builder.append("; permissions: ").append(characteristic.getPermissions());
+                builder.append("; properties: ").append(characteristic.getProperties());
+                builder.append("; writeType: ").append(characteristic.getWriteType());
+                builder.append("; value: ")
+                        .append(BluetoothGattTool.binToHex(characteristic.getValue()));
+                Log.i(tag, builder.toString());
+                builder.setLength(0);
+
+                Log.i(tag, cIndex + " ==>: descriptor ----> START");
+                int dIndex = 0;
+                for (BluetoothGattDescriptor descriptor : characteristic.getDescriptors()) {
+                    dIndex++;
+                    builder.append(cIndex).append(".").append(dIndex).append("、descriptor ");
+                    builder.append("uuid: ").append(descriptor.getUuid());
+                    builder.append("; permissions: ").append(descriptor.getPermissions());
+                    builder.append("; value: ")
+                            .append(BluetoothGattTool.binToHex(characteristic.getValue()));
+                    Log.d(tag, builder.toString());
+                    builder.setLength(0);
+                }
+                Log.i(tag, "==>: descriptor ----> END");
+            }
+            Log.w(tag, "==>: characteristic ----> END");
+            Log.e(tag, "\n-------- end -------- " + sIndex + " ------------------------");
+        }
+        builder.setLength(0);
     }
 
 

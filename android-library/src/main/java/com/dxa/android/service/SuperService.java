@@ -13,15 +13,9 @@ import com.dxa.android.logger.LogLevel;
  */
 
 public abstract class SuperService<T extends ServiceDelegate> extends Service {
-    protected final DLogger logger = new DLogger(
-    		"Service", LogLevel.NONE);
 
+    protected final DLogger logger = new DLogger(getClass().getSimpleName(), LogLevel.NONE);
     protected T delegate;
-
-    public SuperService() {
-        String tag = getClass().getSimpleName();
-        logger.setTag(tag);
-    }
 
     @Nullable
     @Override

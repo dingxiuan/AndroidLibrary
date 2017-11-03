@@ -6,9 +6,9 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothProfile;
 
+import com.dxa.android.bluetooth.gatt.OnGattChangedListener;
 import com.dxa.android.logger.DLogger;
 import com.dxa.android.logger.LogLevel;
-import com.dxa.android.bluetooth.gatt.OnGattChangedListener;
 
 /**
  * 默认的BluetoothGattCallback类

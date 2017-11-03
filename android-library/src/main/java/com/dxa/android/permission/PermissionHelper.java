@@ -26,8 +26,7 @@ public class PermissionHelper {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
     }
 
-    
-    
+
     /**
      * 获取权限
      */
@@ -57,7 +56,7 @@ public class PermissionHelper {
         int code = getPermissionResult(c, permission);
         return isDenied(code);
     }
-    
+
     /**
      * 是否需要解释获取权限原因
      */
@@ -65,7 +64,7 @@ public class PermissionHelper {
         return ActivityCompat.shouldShowRequestPermissionRationale(activity, permission);
     }
 
-    
+
     /**
      * 获取权限的结果码
      *
@@ -76,7 +75,7 @@ public class PermissionHelper {
     public static int getPermissionResult(Context c, String permission) {
         return checkSDK() ? c.checkSelfPermission(permission) : 0;
     }
-    
+
     /**
      * 获取所有已授权的权限
      *
@@ -120,8 +119,8 @@ public class PermissionHelper {
      * @return 未授权的权限集合
      */
     public static String[] getDeniedPermissions(Context c, String[] permissions) {
-    	required(c, permissions);
-    	
+        required(c, permissions);
+
         ArrayList<String> deniedPermissions = new ArrayList<>();
         for (String p : permissions) {
             if (isDenied(c, p))
@@ -130,23 +129,24 @@ public class PermissionHelper {
         int size = deniedPermissions.size();
         return size > 0 ? deniedPermissions.toArray(new String[size]) : new String[0];
     }
-    
+
     /**
      * 获取非Granted类型的权限
-     * @param c 上下文对象
+     *
+     * @param c           上下文对象
      * @param permissions 权限
      */
     public static String[] getNonGrantedPermissions(Context c, String[] permissions) {
-    	required(c, permissions);
-    	
-    	ArrayList<String> nonGrantedPermissions = new ArrayList<>();
+        required(c, permissions);
+
+        ArrayList<String> nonGrantedPermissions = new ArrayList<>();
         for (String p : permissions) {
             if (!isGranted(c, p))
                 nonGrantedPermissions.add(p);
         }
         int size = nonGrantedPermissions.size();
         return size > 0 ? nonGrantedPermissions.toArray(new String[size]) : new String[0];
-	}
+    }
 
     /**
      * 请求权限
@@ -159,34 +159,34 @@ public class PermissionHelper {
         if (checkSDK() && notNull(c) && nonEmpty(permissions)) {
             String[] ps = getNonGrantedPermissions(c, permissions);
             if (ps.length > 0) {
-            	c.requestPermissions(ps, requestCode);
-            	return true;
-			}
+                c.requestPermissions(ps, requestCode);
+                return true;
+            }
         }
         return false;
     }
 
-	/**
+    /**
      * 请求权限
      */
     public static boolean request(Activity c, int requestCode, String permission) {
         String[] permissions = new String[]{permission};
-    	required(c, permissions);
-    	if (checkSDK() && !isGranted(c, permission)) {
+        required(c, permissions);
+        if (checkSDK() && !isGranted(c, permission)) {
             c.requestPermissions(permissions, requestCode);
             return true;
-        } 
+        }
         return false;
     }
 
-    
-	private static void required(Context c, String[] permissions) {
+
+    private static void required(Context c, String[] permissions) {
         if (isNull(c))
             throw new NullPointerException("Context's object is null !");
         else if (isNull(permissions))
             throw new NullPointerException("permissions is null");
-        else if (haveEmpty(permissions)) 
-        	throw new IllegalStateException("permissions have empty");
+        else if (haveEmpty(permissions))
+            throw new IllegalStateException("permissions have empty");
     }
 
     private static <T> boolean notNull(T o) {
@@ -196,7 +196,7 @@ public class PermissionHelper {
     private static <T> boolean isNull(T o) {
         return o == null;
     }
-    
+
     private static boolean haveEmpty(String... ts) {
         if (ts == null)
             return true;
@@ -207,7 +207,7 @@ public class PermissionHelper {
         }
         return false;
     }
-    
+
     private static boolean nonEmpty(String... ts) {
         if (ts == null)
             return false;

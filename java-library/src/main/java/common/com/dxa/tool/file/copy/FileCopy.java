@@ -1,6 +1,7 @@
-package com.dxa.utils.file.copy;
+package com.dxa.tool.file.copy;
 
-import com.dxa.utils.check.Checker;
+
+import com.dxa.tool.check.Checker;
 
 import java.io.File;
 import java.io.FileInputStream;

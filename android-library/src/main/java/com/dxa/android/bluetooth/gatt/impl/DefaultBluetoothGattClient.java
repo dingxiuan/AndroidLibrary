@@ -14,7 +14,6 @@ import com.dxa.android.bluetooth.gatt.OnGattChangedListener;
 import com.dxa.android.logger.DLogger;
 import com.dxa.android.logger.LogLevel;
 
-import java.util.Arrays;
 import java.util.UUID;
 
 /**
@@ -174,8 +173,8 @@ public class DefaultBluetoothGattClient implements BluetoothGattClient {
     @Override
     public void close() {
         if (mGatt != null) {
-            mGatt.disconnect();
             mGatt.close();
+            mGatt.disconnect();
             mDevice = null;
             mGatt = null;
         }
@@ -255,7 +254,7 @@ public class DefaultBluetoothGattClient implements BluetoothGattClient {
             return false;
 
         if (enableNotification) {
-            logger.i("readCharacteristic ==>: 设置特征提醒: ", characteristic.getUuid().toString());
+            logger.i("readCharacteristic ==>: 设置特征提醒: ", characteristic.getUuid());
             mGatt.setCharacteristicNotification(characteristic, true);
         }
         return mGatt.readCharacteristic(characteristic);
@@ -266,7 +265,6 @@ public class DefaultBluetoothGattClient implements BluetoothGattClient {
      */
     @Override
     public boolean writeCharacteristic(BluetoothGattCharacteristic characteristic, byte[] value) {
-        logger.i("writeCharacteristic ==>: 发送数据: ", Arrays.toString(value), ", ", BluetoothGattTool.binToHex(value));
         return check(characteristic, mGatt)
                 && characteristic.setValue(value)
                 && mGatt.writeCharacteristic(characteristic);

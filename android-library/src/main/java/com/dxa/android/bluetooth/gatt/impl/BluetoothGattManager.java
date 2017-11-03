@@ -36,7 +36,7 @@ public class BluetoothGattManager {
         this.client = client;
     }
 
-    public void setDebug(boolean debug){
+    public void setDebug(boolean debug) {
         logger.i(debug ? LogLevel.DEBUG : LogLevel.NONE);
     }
 
@@ -62,12 +62,12 @@ public class BluetoothGattManager {
      * 写入数据
      *
      * @param characteristic BluetoothGattCharacteristic对象
-     * @param hex            字符串
+     * @param hex            16进制字符串
      * @return 是否写入
      */
     public boolean write(BluetoothGattCharacteristic characteristic, String hex) {
         byte[] value = BluetoothGattTool.hexToBin(hex);
-        return write(characteristic, value);
+        return getClient().writeCharacteristic(characteristic, value);
     }
 
     /**
@@ -78,19 +78,17 @@ public class BluetoothGattManager {
      * @return 是否写入
      */
     public boolean write(BluetoothGattCharacteristic characteristic, byte[] value) {
-//        getClient().setCharacteristicNotification(characteristic, true);
         return getClient().writeCharacteristic(characteristic, value);
     }
 
     /**
      * 写入数据
      *
-     * @param hex 字符串
+     * @param value 字符串
      * @return 是否写入
      */
-    public boolean write(String hex) {
+    public boolean write(String value) {
         required();
-        byte[] value = BluetoothGattTool.hexToBin(hex);
         return write(mCharacteristic, value);
     }
 

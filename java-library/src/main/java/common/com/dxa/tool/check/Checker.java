@@ -1,4 +1,4 @@
-package com.dxa.utils.check;
+package com.dxa.tool.check;
 
 import java.io.File;
 import java.util.Collection;

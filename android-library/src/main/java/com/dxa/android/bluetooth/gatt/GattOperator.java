@@ -51,7 +51,6 @@ public interface GattOperator {
      * 写入特征值
      */
     boolean writeCharacteristic(BluetoothGattCharacteristic characteristic, byte[] value);
-
     /**
      * 写入特征值
      */

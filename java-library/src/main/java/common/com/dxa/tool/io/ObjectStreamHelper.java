@@ -1,4 +1,4 @@
-package com.dxa.utils.io;
+package com.dxa.tool.io;
 
 import java.io.File;
 import java.io.FileInputStream;

@@ -1,4 +1,9 @@
+
+
 apply plugin: 'com.android.library'
+
+//apply plugin: 'executable-jar'
+
 
 android {
 
