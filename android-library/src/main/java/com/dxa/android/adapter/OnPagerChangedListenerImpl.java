@@ -4,9 +4,8 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 
 /**
- * Created by Administrator on 2016/12/26.
+ * 默认的OnPageChangeListener实现
  */
-
 public class OnPagerChangedListenerImpl implements ViewPager.OnPageChangeListener {
 
     protected PagerAdapter adapter;

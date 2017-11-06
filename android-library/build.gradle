@@ -52,18 +52,17 @@ dependencies {
 
 }
 
-task buildMyJar(type: Jar, dependsOn: ['build']) {
-    //导出的jar文件名称
-    archiveName = 'android-library-2.2.0.jar'
-    //从哪个目录打包jar
-    from('build/intermediates/classes/debug')
-    //导出的jar文件的存放目录（未指定则默认存放在build/libs下）
-    destinationDir = file('build/libs')
-    //去掉不要的类
-    exclude('com/dxa/android/bluetooth/')
-//    exclude('com/example/testapp/BuildConfig\$*.class')
-    exclude('**/R.class')
-    exclude('**/R\$*.class')
-    //需要打包的类
-//    include('com/example/testapp/*.class')
+def jarName = 'android-library-v2.6.0';
+
+task deleteOldJar(type: Delete) {
+    delete 'build/outputs/'+ jarName
 }
+
+task exportJar(type: Copy) {
+    from('build/intermediates/bundles/debug/')
+    into('build/libs/')
+    include('classes.jar')
+    rename ('classes.jar', jarName)
+}
+
+exportJar.dependsOn(deleteOldJar, build)

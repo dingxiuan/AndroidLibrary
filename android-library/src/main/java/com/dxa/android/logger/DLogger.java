@@ -2,11 +2,8 @@ package com.dxa.android.logger;
 
 import android.util.Log;
 
-import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
-import java.util.LinkedHashMap;
 import java.util.Locale;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 打印日志
@@ -36,17 +33,13 @@ public class DLogger {
         LEVEL = d ? LogLevel.VERBOSE : LogLevel.NONE;
     }
 
-    private static final LinkedHashMap<WeakReference<DLogger>, Integer> loggerMap = new LinkedHashMap<>();
-    private static final AtomicInteger loggerCounter = new AtomicInteger(0);
-
-
     /**********************************************************/
     public static final String PATTERN = "yyyy-MM-dd HH:mm:ss.SSS";
 
     /**
      * 格式化日期
      */
-    private SimpleDateFormat sdf = new SimpleDateFormat(PATTERN, Locale.getDefault());
+    private final SimpleDateFormat sdf = new SimpleDateFormat(PATTERN, Locale.getDefault());
     /**
      * 拼接字符串
      */
@@ -69,9 +62,6 @@ public class DLogger {
     public DLogger(String tag, LogLevel level) {
         this.tag = tag;
         this.level = level;
-        // 缓存DLogger对象
-        int i = loggerCounter.getAndIncrement();
-        loggerMap.put(new WeakReference<>(this), i);
     }
 
     public String getTag() {

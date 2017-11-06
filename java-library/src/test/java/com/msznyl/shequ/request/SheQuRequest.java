@@ -2,7 +2,7 @@ package com.msznyl.shequ.request;
 
 import com.dxa.network.okhttp.interceptor.NetworkInterceptor;
 import com.dxa.network.rxjava2.RxRetrofitRequest;
-import com.dxa.utils.unit.Units;
+import com.dxa.tool.unit.Units;
 
 import java.io.File;
 import java.io.IOException;

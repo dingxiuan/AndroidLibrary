@@ -1,7 +1,7 @@
 package com.dxa.okhttp.entity;
 
 import com.dxa.network.okhttp.OkHttpHelper;
-import com.dxa.utils.file.FileUtils;
+import com.dxa.tool.file.FileUtils;
 
 import java.io.File;
 import java.io.IOException;

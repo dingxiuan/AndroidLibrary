@@ -16,21 +16,21 @@ public class PagerAdapterFactory {
         throw new IllegalAccessError("不允许直接new对象");
     }
 
-    public static <V extends View> CommonPagerAdapter<V> newPagerAdapter(List<V> views) {
-        return new CommonPagerAdapter<>(views);
+    public static <V extends View> ViewPagerAdapter<V> newPagerAdapter(List<V> views) {
+        return new ViewPagerAdapter<>(views);
     }
 
 
-    public static <V extends View> CommonPagerAdapter<V> newPagerAdapter(
+    public static <V extends View> ViewPagerAdapter<V> newPagerAdapter(
             List<V> views, List<? extends CharSequence> titles) {
-        return new CommonPagerAdapter<>(views, titles);
+        return new ViewPagerAdapter<>(views, titles);
     }
 
-    public static <V extends View> CommonPagerAdapter<V> newLeftSlidePagerAdapter(List<V> views) {
+    public static <V extends View> ViewPagerAdapter<V> newLeftSlidePagerAdapter(List<V> views) {
         return new UnlimitedLeftSlidePagerAdapter<>(views);
     }
 
-    public static <V extends View> CommonPagerAdapter<V> newLeftSlidePagerAdapter(
+    public static <V extends View> ViewPagerAdapter<V> newLeftSlidePagerAdapter(
             List<V> views, List<? extends CharSequence> titles) {
         return new UnlimitedLeftSlidePagerAdapter<>(views, titles);
     }

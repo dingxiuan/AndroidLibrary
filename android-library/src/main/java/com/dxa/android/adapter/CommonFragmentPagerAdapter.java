@@ -12,21 +12,21 @@ import java.util.List;
  * FragmentPagerAdapter的实现
  */
 
-class CommonFragmentPagerAdapter extends FragmentPagerAdapter {
+class CommonFragmentPagerAdapter<T extends Fragment> extends FragmentPagerAdapter {
 
     private List<String> titles;
-    private List<Fragment> fragments;
+    private List<T> fragments;
 
-    public CommonFragmentPagerAdapter(FragmentManager fm, List<Fragment> fragments) {
+    public CommonFragmentPagerAdapter(FragmentManager fm, List<T> fragments) {
         super(fm);
         this.fragments = fragments;
     }
 
-    public CommonFragmentPagerAdapter(FragmentManager fm, List<Fragment> fragments, String[] titles) {
+    public CommonFragmentPagerAdapter(FragmentManager fm, List<T> fragments, String[] titles) {
         this(fm, fragments, Arrays.asList(titles));
     }
 
-    public CommonFragmentPagerAdapter(FragmentManager fm, List<Fragment> fragments, List<String> titles) {
+    public CommonFragmentPagerAdapter(FragmentManager fm, List<T> fragments, List<String> titles) {
         super(fm);
         if (fragments.size() != titles.size()) {
             throw new IllegalArgumentException("Page's size not equals title's size");

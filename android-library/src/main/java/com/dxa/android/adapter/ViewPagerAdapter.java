@@ -11,16 +11,16 @@ import java.util.List;
  * PagerAdapter的基类，主要操作View
  */
 
-public class CommonPagerAdapter<V extends View> extends PagerAdapter {
+public class ViewPagerAdapter<V extends View> extends PagerAdapter {
 
     private List<V> views;
     private List<? extends CharSequence> titles;
 
-    public CommonPagerAdapter(List<V> views) {
+    public ViewPagerAdapter(List<V> views) {
         this.views = views;
     }
 
-    public CommonPagerAdapter(List<V> views, List<? extends CharSequence> titles) {
+    public ViewPagerAdapter(List<V> views, List<? extends CharSequence> titles) {
         if (views.size() != titles.size()) {
             throw new IllegalArgumentException("The view's size not equals title's size");
         }

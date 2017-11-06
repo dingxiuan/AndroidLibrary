@@ -8,7 +8,7 @@ import java.util.List;
  * 无限左划的PagerAdapter
  */
 
-class UnlimitedLeftSlidePagerAdapter<V extends View> extends CommonPagerAdapter<V> {
+class UnlimitedLeftSlidePagerAdapter<V extends View> extends ViewPagerAdapter<V> {
 
     public UnlimitedLeftSlidePagerAdapter(List<V> views) {
         super(views);
