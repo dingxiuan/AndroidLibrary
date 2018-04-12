@@ -1,0 +1,30 @@
+
+android {
+    lintOptions{
+        abortOnError false
+    }
+}
+
+def jarName = getName();
+def jarVersion = "-v2.7.0";
+def sdkDestinationPath = "build";
+def zipFile = file('build/intermediates/intermediate-jars/debug/classes.jar')
+
+println('当前构建的jar包是: ' + jarName)
+
+task deleteBuild(type: Delete) {
+    delete sdkDestinationPath + jarName + jarVersion + ".jar"
+}
+
+task makeJar(type: Jar) {
+    from zipTree(zipFile)
+    //将assets目录打入jar包
+    baseName = jarName + jarVersion
+    from fileTree(dir: 'src/main',includes: ['assets/**'])
+    from fileTree(dir: 'src/main/java',includes: ['com/**/*.java'])
+    destinationDir = file(sdkDestinationPath)
+}
+
+makeJar.dependsOn(deleteBuild, build)
+
+

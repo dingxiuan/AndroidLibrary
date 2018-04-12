@@ -1,68 +1,18 @@
 
-
 apply plugin: 'com.android.library'
 
-//apply plugin: 'executable-jar'
+// 引入公共依赖
+apply from: "${rootProject.getProjectDir()}/buildSystem/AndroidConfig.gradle"
 
-
-android {
-
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
-
-    defaultConfig {
-        minSdkVersion 11
-        targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-
-}
+// 将代码打成jar包
+apply from: "${rootProject.getProjectDir()}/buildSystem/make-jar.gradle"
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    compile 'com.android.support:recyclerview-v7:25.3.1'
-    compile 'com.android.support:design:25.3.1'
-
-    testCompile 'junit:junit:4.12'
-    compile project(':java-library')
-    // rxJava
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
     // ormlite
-    compile 'com.j256.ormlite:ormlite-core:5.0'
-    compile 'com.j256.ormlite:ormlite-android:5.0'
-    compile 'com.j256.ormlite:ormlite-core:5.0'
-    // rxBinding
-    //    compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
-    //    compile 'com.jakewharton.rxbinding2:rxbinding-support-v4:2.0.0'
-    //    compile 'com.jakewharton.rxbinding2:rxbinding-appcompat-v7:2.0.0'
-    //    compile 'com.jakewharton.rxbinding2:rxbinding-design:2.0.0'
-    //    compile 'com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:2.0.0'
-
+    implementation 'com.j256.ormlite:ormlite-core:5.0'
+    implementation 'com.j256.ormlite:ormlite-android:5.0'
+    implementation 'com.j256.ormlite:ormlite-core:5.0'
 }
 
-def jarName = 'android-library-v2.6.0';
-
-task deleteOldJar(type: Delete) {
-    delete 'build/outputs/'+ jarName
-}
-
-task exportJar(type: Copy) {
-    from('build/intermediates/bundles/debug/')
-    into('build/libs/')
-    include('classes.jar')
-    rename ('classes.jar', jarName)
-}
-
-exportJar.dependsOn(deleteOldJar, build)

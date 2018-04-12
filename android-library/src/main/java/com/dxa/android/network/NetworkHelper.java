@@ -5,8 +5,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 /**
- * 网络工具类
+ * 网络工具类，不要使用了
  */
+@Deprecated
 public class NetworkHelper {
 
     private NetworkHelper() {
