@@ -180,18 +180,7 @@ public final class DateFormatter {
     /**
      * 格式化日期
      */
-    public static String fomatNow(String pattern) {
-        if (Checker.isBlank(pattern))
-            return null;
-        long current = System.currentTimeMillis();
-        SecureDateFormat sdf = getSDF(pattern);
-        return format(current, sdf);
-    }
-
-    /**
-     * 格式化日期
-     */
-    public static String fomat(Date time, String pattern) {
+    public static String format(Date time, String pattern) {
         if (Checker.hasNull(time, pattern))
             return null;
         SecureDateFormat sdf = getSDF(pattern);
@@ -201,7 +190,7 @@ public final class DateFormatter {
     /**
      * 格式化日期
      */
-    public static String fomat(long time, String pattern) {
+    public static String format(long time, String pattern) {
         if (Checker.isNull(pattern))
             return null;
         SecureDateFormat sdf = getSDF(pattern);
