@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 日期格式化：
- *
+ * <p>
  * 默认: 横线，没有后缀
  * HR: 代表横线，默认
  * BACKSLASH: 代表反斜杠
@@ -58,10 +58,26 @@ public final class DateFormatter {
     // 中文
     public static final String yMdHmsS_CN = "yyyy年MM月dd HH时mm分ss秒.SSS";
 
+    // ************************************************/
+    // 横线
+    public static final String Hms = "HH:mm:ss";
+    // 中文
+    public static final String Hms_CN = "HH时mm分ss秒";
+    // 横线
+    public static final String HmsS = "HH:mm:ss.SSS";
+    // 中文
+    public static final String HmsS_CN = "HH时mm分ss秒.SSS";
+
+
+    private static final String EMPTY = "";
     /**
      * 缓存时间格式化
      */
-    private static final ConcurrentHashMap<String, SoftReference<SecureDateFormat>> FORMAT_CACHE = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, SoftReference<SecureDateFormat>> FORMAT_CACHE;
+
+    static {
+        FORMAT_CACHE = new ConcurrentHashMap<>();
+    }
 
     private DateFormatter() {
     }
@@ -103,7 +119,8 @@ public final class DateFormatter {
     public static Date parseOrThrows(String time, String pattern) throws ParseException {
         if (Checker.hasBlank(time, pattern))
             return null;
-        return parseOrThrows(time, getSDF(pattern));
+        SecureDateFormat sdf = getSDF(pattern);
+        return parseOrThrows(time, sdf);
     }
 
     /**
@@ -132,13 +149,14 @@ public final class DateFormatter {
     public static Date parse(String time, String pattern) {
         if (Checker.hasNull(time, pattern))
             return null;
-        return parse(time, getSDF(pattern));
+        SecureDateFormat sdf = getSDF(pattern);
+        return parse(time, sdf);
     }
 
     /**
      * 获取long
      *
-     * @param time 字符串时间
+     * @param time    字符串时间
      * @param pattern 格式
      * @return 返回时间，如果格式有问题，返回 0
      */
@@ -149,8 +167,8 @@ public final class DateFormatter {
     /**
      * 获取long
      *
-     * @param time 字符串时间
-     * @param pattern 格式
+     * @param time         字符串时间
+     * @param pattern      格式
      * @param defaultValue 默认值
      * @return 返回时间，如果格式有问题，返回 0
      */
@@ -166,7 +184,8 @@ public final class DateFormatter {
         if (Checker.isBlank(pattern))
             return null;
         long current = System.currentTimeMillis();
-        return format(current, getSDF(pattern));
+        SecureDateFormat sdf = getSDF(pattern);
+        return format(current, sdf);
     }
 
     /**
@@ -175,7 +194,8 @@ public final class DateFormatter {
     public static String fomat(Date time, String pattern) {
         if (Checker.hasNull(time, pattern))
             return null;
-        return format(time.getTime(), getSDF(pattern));
+        SecureDateFormat sdf = getSDF(pattern);
+        return format(time, sdf);
     }
 
     /**
@@ -184,7 +204,8 @@ public final class DateFormatter {
     public static String fomat(long time, String pattern) {
         if (Checker.isNull(pattern))
             return null;
-        return format(time, getSDF(pattern));
+        SecureDateFormat sdf = getSDF(pattern);
+        return format(time, sdf);
     }
 
     /**
@@ -207,6 +228,7 @@ public final class DateFormatter {
 
     /**
      * 格式化当前时间
+     *
      * @param pattern 格式
      * @return 返回格式化好的时间字符串
      */
@@ -217,6 +239,7 @@ public final class DateFormatter {
 
     /**
      * 格式化当前时间
+     *
      * @return 返回格式化好的时间字符串
      */
     public static String formatNow() {
