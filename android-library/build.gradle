@@ -8,7 +8,7 @@ apply from: "${rootProject.getProjectDir()}/buildSystem/AndroidConfig.gradle"
 apply from: "${rootProject.getProjectDir()}/buildSystem/make-jar.gradle"
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    api fileTree(include: ['*.jar'], dir: 'libs')
 
     // ormlite
     implementation 'com.j256.ormlite:ormlite-core:5.0'
