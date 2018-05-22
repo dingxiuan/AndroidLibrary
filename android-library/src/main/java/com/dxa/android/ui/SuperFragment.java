@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.dxa.android.logger.DLogger;
 import com.dxa.android.logger.LogLevel;
+import com.dxa.android.ui.handler.AsyncHandler;
 
 /**
  * Fragment基类
@@ -190,8 +191,9 @@ public abstract class SuperFragment<P extends IFragmentPresenter> extends Fragme
     @Override
     public void finishActivity() {
         log("finishActivity()");
-        if (getActivity() != null)
+        if (getActivity() != null) {
             getActivity().finish();
+        }
     }
 
     @Override

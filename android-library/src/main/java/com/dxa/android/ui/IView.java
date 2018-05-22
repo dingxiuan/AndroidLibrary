@@ -6,6 +6,8 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 
+import com.dxa.android.ui.handler.AsyncHandler;
+
 /**
  * View的基本接口
  */

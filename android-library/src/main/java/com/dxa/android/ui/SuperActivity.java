@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.Looper;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
@@ -16,6 +17,8 @@ import android.widget.Toast;
 
 import com.dxa.android.logger.DLogger;
 import com.dxa.android.logger.LogLevel;
+import com.dxa.android.ui.handler.AsyncHandler;
+import com.dxa.android.ui.handler.SyncHandler;
 
 
 /**
@@ -34,14 +37,6 @@ public abstract class SuperActivity<P extends ActivityPresenter>
      * Presenter对象
      */
     private P presenter;
-    /**
-     * 主线程的Handler
-     */
-    private volatile Handler syncHandler;
-    /**
-     * 子线程的Handler
-     */
-    private volatile AsyncHandler asyncHandler;
     /**
      * Activity的生命周期回调
      */
@@ -138,12 +133,7 @@ public abstract class SuperActivity<P extends ActivityPresenter>
 
     @Override
     public Handler getSyncHandler() {
-        synchronized (this) {
-            if (syncHandler == null) {
-                syncHandler = new Handler(Looper.getMainLooper());
-            }
-        }
-        return syncHandler;
+        return SyncHandler.getInstance();
     }
 
     @Override

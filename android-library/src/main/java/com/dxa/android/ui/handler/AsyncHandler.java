@@ -1,4 +1,4 @@
-package com.dxa.android.ui;
+package com.dxa.android.ui.handler;
 
 
 import android.os.Handler;
@@ -12,8 +12,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 异步线程
+ *
+ * @author DINGXIUAN
  */
-public class AsyncHandler implements Runnable {
+public class AsyncHandler {
 
     private static final class Holder {
         private static volatile AsyncHandler INSTANCE;
@@ -36,26 +38,34 @@ public class AsyncHandler implements Runnable {
         return "AsyncHandler-" + COUNTER.incrementAndGet();
     }
 
+    private final DLogger logger = new DLogger();
+
     private Thread currentThread;
     private Handler handler;
 
     private volatile Looper looper;
-
-    private final DLogger logger = new DLogger();
+    private final boolean startNow;
 
     public AsyncHandler() {
-        this(true);
+        this(true, true);
     }
 
-    public AsyncHandler(boolean isDaemon) {
-        this.currentThread = new Thread(this);
+    public AsyncHandler(boolean startNow) {
+        this(true, startNow);
+    }
+
+    public AsyncHandler(boolean isDaemon, boolean startNow) {
+        this.startNow = startNow;
+        this.currentThread = new Thread(r);
         this.currentThread.setDaemon(isDaemon);
         this.currentThread.setName(getThreadName());
 
         this.logger.setTag(currentThread.getName());
 
-        // 开启当前的线程
-        this.start();
+        if (startNow) {
+            // 开启当前的线程
+            this.start();
+        }
     }
 
     public void setDebug(boolean debug) {
@@ -93,6 +103,11 @@ public class AsyncHandler implements Runnable {
         if (looper != null) {
             return;
         }
+
+        if (startNow) {
+            return;
+        }
+
         currentThread.start();
     }
 
@@ -104,20 +119,22 @@ public class AsyncHandler implements Runnable {
         }
     }
 
-    @Override
-    public void run() {
-        if (currentThread != Thread.currentThread() || looper != null) {
-            return;
-        }
+    private final Runnable r = new Runnable() {
+        @Override
+        public void run() {
+            if (currentThread != Thread.currentThread() || looper != null) {
+                return;
+            }
 
-        if (looper == null) {
-            Looper.prepare();
-            looper = Looper.myLooper();
-            handler = new Handler(looper);
-            logger.i("Looper开始");
-            Looper.loop();
-            logger.i("Looper结束");
+            if (looper == null) {
+                Looper.prepare();
+                looper = Looper.myLooper();
+                handler = new Handler(looper);
+                logger.i("Looper开始");
+                Looper.loop();
+                logger.i("Looper结束");
+            }
         }
-    }
+    };
 
 }

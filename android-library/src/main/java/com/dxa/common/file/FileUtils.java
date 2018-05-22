@@ -169,8 +169,9 @@ public final class FileUtils {
      */
 
     public static boolean checkFileIfNotExistCreate(File file) throws IOException {
-        if (file == null)
+        if (file == null) {
             throw new IOException("File对象为 null ！");
+        }
 
         boolean exist = file.exists();
         if (!exist) {
@@ -192,8 +193,9 @@ public final class FileUtils {
      * @return
      */
     public static boolean checkDirsIfNotExistCreate(File file) throws IOException {
-        if (file == null)
+        if (file == null) {
             throw new IOException("File对象为 null ！");
+        }
 
         if (file.exists() && file.isFile()) {
             throw new IOException("不是目录!");
@@ -210,8 +212,9 @@ public final class FileUtils {
      * 关闭流
      */
     public static void close(Closeable... cs) {
-        if (cs == null || cs.length == 0)
+        if (cs == null || cs.length == 0) {
             return;
+        }
 
         for (Closeable c : cs) {
             if (c != null){
