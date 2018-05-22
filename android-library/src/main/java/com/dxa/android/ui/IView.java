@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Handler;
 
 /**
  * View的基本接口
@@ -54,6 +55,26 @@ public interface IView extends IShowToast {
      * 获取当前的Activity
      */
     Context getContext();
+
+    /**
+     * 运行在主线程
+     */
+    void runUiThread(Runnable runnable);
+
+    /**
+     * 获取主线程的Handler
+     */
+    Handler getSyncHandler();
+
+    /**
+     * 获取子线程的Handler
+     */
+    AsyncHandler getAsyncHandler();
+
+    /**
+     * 获取默认的Handler
+     */
+    Handler getDefaultHandler();
 
     /**
      * 获取资源对象

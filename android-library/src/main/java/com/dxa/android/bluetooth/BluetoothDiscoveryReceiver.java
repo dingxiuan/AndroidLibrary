@@ -7,6 +7,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.support.v4.content.LocalBroadcastManager;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 蓝牙扫描接收的广播
@@ -19,9 +23,21 @@ public class BluetoothDiscoveryReceiver extends BroadcastReceiver {
         if (callback == null) throw new NullPointerException("Callback's instance is null !");
         IntentFilter filter = BluetoothHelper.getDiscoverFilter();
         BluetoothDiscoveryReceiver receiver = new BluetoothDiscoveryReceiver(callback);
-        context.registerReceiver(receiver, filter);
+        LocalBroadcastManager.getInstance(context).registerReceiver(receiver, filter);
         return receiver;
     }
+
+    /**
+     * 取消注册广播
+     *
+     * @param context  上下文对象
+     * @param receiver 广播
+     */
+    public static void unregister(Context context, BluetoothDiscoveryReceiver receiver) {
+        LocalBroadcastManager.getInstance(context).unregisterReceiver(receiver);
+    }
+
+    private static final Map<Context, BroadcastReceiver> receiverCache = new ConcurrentHashMap<>();
 
     private Callback callback;
 

@@ -1,10 +1,5 @@
 package com.dxa.android.bluetooth;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -15,6 +10,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * 蓝牙帮助类
@@ -66,14 +66,14 @@ public final class BluetoothHelper {
     @SuppressLint("InlinedApi")
     public static boolean isSupportBLE(Context context) {
         return context.getPackageManager()
-            .hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE);
+                .hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE);
     }
 
-    
+
     private static boolean isEnabled(BluetoothAdapter adapter) {
         return adapter.isEnabled();
     }
-    
+
     /**
      * 蓝牙是否可用
      */
@@ -98,7 +98,7 @@ public final class BluetoothHelper {
      * 打开蓝牙
      */
     public static boolean enable() {
-    	BluetoothAdapter adapter = getAdapter();
+        BluetoothAdapter adapter = getAdapter();
         return isEnabled(adapter) || adapter.enable();
     }
 
@@ -114,7 +114,7 @@ public final class BluetoothHelper {
      * 扫描蓝牙设备
      */
     public static boolean startDiscovery() {
-    	BluetoothAdapter adapter = getAdapter();
+        BluetoothAdapter adapter = getAdapter();
         return isEnabled(adapter) && adapter.startDiscovery();
     }
 
@@ -122,7 +122,7 @@ public final class BluetoothHelper {
      * 取消扫描
      */
     public static boolean cancelDiscovery() {
-    	BluetoothAdapter adapter = getAdapter();
+        BluetoothAdapter adapter = getAdapter();
         return isEnabled(adapter) && adapter.cancelDiscovery();
     }
 
@@ -130,7 +130,7 @@ public final class BluetoothHelper {
      * 是否正在扫描
      */
     public static boolean isDiscovering() {
-    	BluetoothAdapter adapter = getAdapter();
+        BluetoothAdapter adapter = getAdapter();
         return isEnabled(adapter) && adapter.isDiscovering();
     }
 
@@ -142,7 +142,7 @@ public final class BluetoothHelper {
      * @param duration    可被扫描到的时长
      */
     public static void setConnectableAndDiscoverable(
-        Activity activity, int requestCode, int duration) {
+            Activity activity, int requestCode, int duration) {
         Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
         intent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, duration);
         activity.startActivityForResult(intent, requestCode);
@@ -152,28 +152,25 @@ public final class BluetoothHelper {
      * 获取配对的蓝牙设备
      */
     public static Set<BluetoothDevice> getBondedDevices() {
-    	BluetoothAdapter adapter = getAdapter();
-        return isEnabled(adapter) ? adapter.getBondedDevices() : new HashSet<BluetoothDevice>();
+        BluetoothAdapter adapter = getAdapter();
+        return isEnabled(adapter) ? adapter.getBondedDevices() : new HashSet<>();
     }
 
     /**
      * 获取配对的蓝牙设备
      */
     public static List<BluetoothDevice> getBondedDeviceList() {
-        List<BluetoothDevice> bondedDevices = new ArrayList<>();
-        for (BluetoothDevice d : getBondedDevices()) {
-            bondedDevices.add(d);
-        }
-        return bondedDevices;
+        Set<BluetoothDevice> devices = getBondedDevices();
+        return new ArrayList<>(devices);
     }
 
     /**
      * 设置蓝牙名
      */
     public static void setName(String deviceName) {
-    	BluetoothAdapter adapter = getAdapter();
+        BluetoothAdapter adapter = getAdapter();
         if (isEnabled(adapter))
-        	adapter.setName(deviceName);
+            adapter.setName(deviceName);
         else
             Log.d(TAG, "setName: 蓝牙未开启!");
     }
@@ -182,15 +179,16 @@ public final class BluetoothHelper {
      * 获取蓝牙名
      */
     public static String getName() {
-    	BluetoothAdapter adapter = getAdapter();
+        BluetoothAdapter adapter = getAdapter();
         return isEnabled(adapter) ? adapter.getName() : UNKNOWN;
     }
 
     /**
      * 获取蓝牙的MAC地址
      */
+    @SuppressLint("HardwareIds")
     public static String getAddress() {
-    	BluetoothAdapter adapter = getAdapter();
+        BluetoothAdapter adapter = getAdapter();
         return isEnabled(adapter) ? adapter.getAddress() : UNKNOWN;
     }
 
@@ -198,7 +196,7 @@ public final class BluetoothHelper {
      * 获取蓝牙的状态
      */
     public static int getState() {
-    	BluetoothAdapter adapter = getAdapter();
+        BluetoothAdapter adapter = getAdapter();
         return isEnabled(adapter) ? adapter.getState() : DEFAULT;
     }
 
@@ -206,7 +204,7 @@ public final class BluetoothHelper {
      * 获取蓝牙的扫描模式
      */
     public static int getScanMode() {
-    	BluetoothAdapter adapter = getAdapter();
+        BluetoothAdapter adapter = getAdapter();
         return isEnabled(adapter) ? adapter.getScanMode() : DEFAULT;
     }
 
@@ -227,13 +225,12 @@ public final class BluetoothHelper {
     /**
      * 获取配对的过滤器
      */
-	public static IntentFilter getBondFilter() {
+    public static IntentFilter getBondFilter() {
         IntentFilter filter = new IntentFilter();
-        if (android.os.Build.VERSION_CODES.KITKAT 
-        		< android.os.Build.VERSION.SDK_INT) {
-        	// 配对请求
+        if (android.os.Build.VERSION_CODES.KITKAT < android.os.Build.VERSION.SDK_INT) {
+            // 配对请求
             filter.addAction(BluetoothDevice.ACTION_PAIRING_REQUEST);
-		}
+        }
         // 配对状态改变
         filter.addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
         return filter;
@@ -243,20 +240,18 @@ public final class BluetoothHelper {
      * 获取蓝牙状态改变的过滤器
      */
     public static IntentFilter getStateChangedFilter() {
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
-        return filter;
+        return new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
     }
 
     /**
      * 取消注册
      */
     public static void unregister(Context context, BroadcastReceiver receiver) {
-        if (notNull(context) && notNull(receiver)) 
-        	context.unregisterReceiver(receiver);
+        if (notNull(context) && notNull(receiver))
+            context.unregisterReceiver(receiver);
     }
 
-    private static boolean notNull(Object o){
+    private static boolean notNull(Object o) {
         return o != null;
     }
 }

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
@@ -23,8 +24,8 @@ import com.dxa.android.logger.LogLevel;
 @SuppressLint("NewApi")
 public abstract class SuperActivity<P extends ActivityPresenter>
         extends AppCompatActivity implements IView {
-	
-	private final ActivityLifecycle LIFECYCLE = new DefaultActivityLifecycle();
+
+    private final ActivityLifecycle LIFECYCLE = new DefaultActivityLifecycle();
 
     protected final DLogger logger = new DLogger("Activity");
     private final Object lock = new Object();
@@ -34,9 +35,13 @@ public abstract class SuperActivity<P extends ActivityPresenter>
      */
     private P presenter;
     /**
-     * 
+     * 主线程的Handler
      */
-    private final Handler handler;
+    private volatile Handler syncHandler;
+    /**
+     * 子线程的Handler
+     */
+    private volatile AsyncHandler asyncHandler;
     /**
      * Activity的生命周期回调
      */
@@ -45,22 +50,21 @@ public abstract class SuperActivity<P extends ActivityPresenter>
     public SuperActivity() {
         String tag = getClass().getSimpleName();
         logger.setTag(tag);
-        handler = new Handler();
     }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-    	logger.d("onCreate");
+        logger.d("onCreate");
         super.onCreate(savedInstanceState);
         lifecycle.onCreate();
         setStatusBarColor();
-        
+
         getPresenter().onCreate();
     }
 
     @Override
     protected void onStart() {
-    	logger.d("onStart");
+        logger.d("onStart");
         super.onStart();
         lifecycle.onStart();
         getPresenter().onStart();
@@ -68,7 +72,7 @@ public abstract class SuperActivity<P extends ActivityPresenter>
 
     @Override
     protected void onResume() {
-    	logger.d("onResume");
+        logger.d("onResume");
         super.onResume();
         lifecycle.onResume();
         getPresenter().onResume();
@@ -76,7 +80,7 @@ public abstract class SuperActivity<P extends ActivityPresenter>
 
     @Override
     protected void onPause() {
-    	logger.d("onPause");
+        logger.d("onPause");
         super.onPause();
         lifecycle.onPause();
         getPresenter().onPause();
@@ -84,7 +88,7 @@ public abstract class SuperActivity<P extends ActivityPresenter>
 
     @Override
     protected void onStop() {
-    	logger.d("onStop");
+        logger.d("onStop");
         super.onStop();
         lifecycle.onStop();
         getPresenter().onStop();
@@ -92,7 +96,7 @@ public abstract class SuperActivity<P extends ActivityPresenter>
 
     @Override
     protected void onRestart() {
-    	logger.d("onRestart");
+        logger.d("onRestart");
         super.onRestart();
         lifecycle.onRestart();
         getPresenter().onRestart();
@@ -100,7 +104,7 @@ public abstract class SuperActivity<P extends ActivityPresenter>
 
     @Override
     protected void onDestroy() {
-    	logger.d("onDestroy");
+        logger.d("onDestroy");
         super.onDestroy();
         lifecycle.onDestroy();
         getPresenter().onDestroy();
@@ -112,27 +116,48 @@ public abstract class SuperActivity<P extends ActivityPresenter>
     public void setStatusBarColor() {
 
     }
-    
+
     /**
      * 设置生命周期回调
      */
     public void setActivityLifecycle(ActivityLifecycle lifecycle) {
-    	this.lifecycle = (lifecycle != null ? lifecycle : LIFECYCLE);
+        this.lifecycle = (lifecycle != null ? lifecycle : LIFECYCLE);
     }
-    
+
     /**
      * 获取当前Activity的对象
      */
-    public final Activity getThisActivity(){
-    	return this;
-    }
-    
-    public final Handler getHandler() {
-        return handler;
+    public final Activity getThisActivity() {
+        return this;
     }
 
-	@SuppressLint("NewApi")
-	@Override
+    @Override
+    public void runUiThread(Runnable runnable) {
+        runOnUiThread(runnable);
+    }
+
+    @Override
+    public Handler getSyncHandler() {
+        synchronized (this) {
+            if (syncHandler == null) {
+                syncHandler = new Handler(Looper.getMainLooper());
+            }
+        }
+        return syncHandler;
+    }
+
+    @Override
+    public AsyncHandler getAsyncHandler() {
+        return AsyncHandler.getInstance();
+    }
+
+    @Override
+    public Handler getDefaultHandler() {
+        return getSyncHandler();
+    }
+
+    @SuppressLint("NewApi")
+    @Override
     public void onBackPressed() {
         super.onBackPressed();
         logger.d("onBackPressed");
@@ -140,33 +165,35 @@ public abstract class SuperActivity<P extends ActivityPresenter>
 
     @Override
     public void finishActivity() {
-    	logger.d("finishActivity");
+        logger.d("finishActivity");
         finish();
     }
 
     @Override
     public void onBackClick() {
-    	logger.d("onBackClick");
+        logger.d("onBackClick");
         finish();
     }
 
     /**
      * 启动Activity
-     * 
-     * @param clazz 	Activity类
-     * @param bundle 	携带的Bundle
-     * @param isFinish  是否启动后销毁Activity
+     *
+     * @param clazz    Activity类
+     * @param bundle   携带的Bundle
+     * @param isFinish 是否启动后销毁Activity
      */
     protected void startAct(Class<? extends Activity> clazz,
                             Bundle bundle,
                             boolean isFinish) {
         Intent intent = new Intent(this, clazz);
-        if (bundle != null)
+        if (bundle != null) {
             intent.putExtras(bundle);
+        }
         startActivity(intent);
         logger.d("启动Activity: ", clazz.getName());
-        if (isFinish)
+        if (isFinish) {
             super.finish();
+        }
     }
 
     @Override
@@ -200,10 +227,9 @@ public abstract class SuperActivity<P extends ActivityPresenter>
     /**
      * 启动Activity
      */
-	@Override
+    @Override
     public void startActForResult(Class<? extends Activity> clazz,
-                                  int requestCode,
-                                  @Nullable Bundle bundle) {
+                                  int requestCode, @Nullable Bundle bundle) {
         if (clazz == null)
             throw new IllegalArgumentException("Activity's class object is null.");
 
@@ -220,8 +246,8 @@ public abstract class SuperActivity<P extends ActivityPresenter>
     }
 
     @Override
-    public void showToast(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    public void showToast(final String msg) {
+        runOnUiThread(() -> Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show());
     }
 
     @Override
@@ -244,7 +270,7 @@ public abstract class SuperActivity<P extends ActivityPresenter>
                 if (presenter == null) {
                     presenter = buildPresenter();
                 }
-                
+
                 if (presenter == null) {
                     presenter = getDefaultPresenter();
                 }
@@ -254,7 +280,7 @@ public abstract class SuperActivity<P extends ActivityPresenter>
     }
 
     @SuppressWarnings("unchecked")
-	public P getDefaultPresenter() {
+    protected P getDefaultPresenter() {
         return (P) new ActivityPresenter<IView>(this) {
         };
     }
@@ -274,10 +300,10 @@ public abstract class SuperActivity<P extends ActivityPresenter>
      * 打印日志
      */
     @Deprecated
-    public void log(Object...msg) {
+    public void log(Object... msg) {
         logger.log(LogLevel.DEBUG, msg);
     }
-    
+
     /**
      * 获取View对象
      */

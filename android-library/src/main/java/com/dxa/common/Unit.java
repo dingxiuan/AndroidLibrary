@@ -1,5 +1,8 @@
 package com.dxa.common;
 
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
 /**
  * 基本单位
  */
@@ -93,6 +96,20 @@ public final class Unit {
     public static final long WEEK = 7 * DAY;
 
     /**
+     * 返回当前Date
+     */
+    public static Date nowDate() {
+        return new Date();
+    }
+
+    /**
+     * 返回当前时间
+     */
+    public static long now() {
+        return System.currentTimeMillis();
+    }
+
+    /**
      * 获得 N 秒的时间长度
      */
     public static long seconds(int second) {
@@ -121,9 +138,121 @@ public final class Unit {
     }
 
     /**
+     * 当前时间加上一个固定的时间，设置负值会被取正后再加
+     *
+     * @param time 相加的时间
+     * @param unit 时间的单位
+     * @return 返回相加后的时间
+     */
+    public static long nowPlus(int time, TimeUnit unit) {
+        time = time >= 0 ? time : -time;
+        long tmp = 0;
+        switch (unit) {
+            case MILLISECONDS:
+                tmp = time;
+                break;
+            case SECONDS:
+                tmp = seconds(time);
+                break;
+            case MINUTES:
+                tmp = minutes(time);
+                break;
+            case HOURS:
+                tmp = hours(time);
+                break;
+            case DAYS:
+                tmp = days(time);
+                break;
+            default:
+                break;
+        }
+        return tmp + System.currentTimeMillis();
+    }
+
+    /**
+     * 当前时间减上一个固定的时间, 设置正/负值都会被取正后再减
+     *
+     * @param time 相减的时间
+     * @param unit 时间的单位
+     * @return 返回相减后的时间
+     */
+    public static long nowSubtract(int time, TimeUnit unit) {
+        // 先取绝对值，为正后再减
+        time = time < 0 ? -time : time;
+        long tmp = 0;
+        switch (unit) {
+            case MILLISECONDS:
+                tmp = time;
+                break;
+            case SECONDS:
+                tmp = seconds(time);
+                break;
+            case MINUTES:
+                tmp = minutes(time);
+                break;
+            case HOURS:
+                tmp = hours(time);
+                break;
+            case DAYS:
+                tmp = days(time);
+                break;
+            default:
+                break;
+        }
+        return System.currentTimeMillis() - tmp;
+    }
+
+    /**
      * 月份
      */
     public enum Month {
-        JANUARY, FEBRUARY, MARCH, APRIL, MAY, JUNE, JULY, AUGUST, SEPTEMBER, OCTOBER, NOVEMBER, DECEMBER;
+        /**
+         * 一月
+         */
+        JANUARY,
+        /**
+         * 二月
+         */
+        FEBRUARY,
+        /**
+         * 三月
+         */
+        MARCH,
+        /**
+         * 四月
+         */
+        APRIL,
+        /**
+         * 五月
+         */
+        MAY,
+        /**
+         * 六月
+         */
+        JUNE,
+        /**
+         * 七月
+         */
+        JULY,
+        /**
+         * 八月
+         */
+        AUGUST,
+        /**
+         * 九月
+         */
+        SEPTEMBER,
+        /**
+         * 十月
+         */
+        OCTOBER,
+        /**
+         * 十一月
+         */
+        NOVEMBER,
+        /**
+         * 十二月
+         */
+        DECEMBER;
     }
 }

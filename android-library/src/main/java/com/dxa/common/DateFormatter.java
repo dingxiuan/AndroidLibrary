@@ -96,7 +96,7 @@ public final class DateFormatter {
             if (sdf == null) {
                 sdf = new SecureDateFormat(pattern);
                 reference = new SoftReference<>(sdf);
-                FORMAT_CACHE.putIfAbsent(pattern, reference);
+                FORMAT_CACHE.put(pattern, reference);
             }
         }
         return sdf;
