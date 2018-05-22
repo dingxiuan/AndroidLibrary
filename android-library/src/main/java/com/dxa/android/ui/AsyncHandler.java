@@ -53,6 +53,9 @@ public class AsyncHandler implements Runnable {
         this.currentThread.setName(getThreadName());
 
         this.logger.setTag(currentThread.getName());
+
+        // 开启当前的线程
+        this.start();
     }
 
     public void setDebug(boolean debug) {
