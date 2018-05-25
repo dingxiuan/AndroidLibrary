@@ -19,7 +19,10 @@ import android.widget.Toast;
 import com.dxa.android.logger.DLogger;
 import com.dxa.android.logger.LogLevel;
 import com.dxa.android.ui.handler.AsyncHandler;
+<<<<<<< HEAD
 import com.dxa.android.ui.handler.SyncHandler;
+=======
+>>>>>>> b16b86800781fd02857e4042c071aae35384df44
 
 /**
  * Fragment基类

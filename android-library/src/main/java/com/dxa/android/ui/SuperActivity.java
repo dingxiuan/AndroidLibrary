@@ -6,6 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+<<<<<<< HEAD
+=======
+import android.os.HandlerThread;
+import android.os.Looper;
+>>>>>>> b16b86800781fd02857e4042c071aae35384df44
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
