@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,6 +18,8 @@ import android.widget.Toast;
 
 import com.dxa.android.logger.DLogger;
 import com.dxa.android.logger.LogLevel;
+import com.dxa.android.ui.handler.AsyncHandler;
+import com.dxa.android.ui.handler.SyncHandler;
 
 /**
  * Fragment基类
@@ -32,10 +33,6 @@ public abstract class SuperFragment<P extends IFragmentPresenter> extends Fragme
     protected DLogger logger = new DLogger("Fragment");
 
     private P presenter;
-    /**
-     * 默认的Handler
-     */
-    private volatile Handler defaultHandler;
 
     public SuperFragment() {
         String tag = getClass().getSimpleName();
@@ -190,8 +187,9 @@ public abstract class SuperFragment<P extends IFragmentPresenter> extends Fragme
     @Override
     public void finishActivity() {
         log("finishActivity()");
-        if (getActivity() != null)
+        if (getActivity() != null) {
             getActivity().finish();
+        }
     }
 
     @Override
@@ -250,12 +248,7 @@ public abstract class SuperFragment<P extends IFragmentPresenter> extends Fragme
 
     @Override
     public Handler getSyncHandler() {
-        synchronized (this) {
-            if (defaultHandler == null) {
-                defaultHandler = new Handler(Looper.getMainLooper());
-            }
-        }
-        return defaultHandler;
+        return SyncHandler.getInstance();
     }
 
     @Override
