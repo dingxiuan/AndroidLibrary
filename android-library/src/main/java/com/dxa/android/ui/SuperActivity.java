@@ -6,11 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-<<<<<<< HEAD
-=======
-import android.os.HandlerThread;
-import android.os.Looper;
->>>>>>> b16b86800781fd02857e4042c071aae35384df44
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
@@ -238,6 +233,7 @@ public abstract class SuperActivity<P extends ActivityPresenter>
         return this;
     }
 
+
     @Override
     public void showToast(final String msg) {
         runOnUiThread(() -> Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show());
@@ -282,11 +278,7 @@ public abstract class SuperActivity<P extends ActivityPresenter>
      * 设置是否调试
      */
     public void setDebug(boolean debug) {
-        if (debug) {
-            logger.setLevel(LogLevel.VERBOSE);
-        } else {
-            logger.setLevel(LogLevel.NONE);
-        }
+        logger.setLevel(debug ? LogLevel.VERBOSE : LogLevel.NONE);
     }
 
     /**
