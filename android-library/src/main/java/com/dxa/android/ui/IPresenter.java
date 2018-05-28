@@ -1,6 +1,9 @@
 package com.dxa.android.ui;
 
 import android.content.Context;
+import android.os.Handler;
+
+import com.dxa.android.ui.handler.AsyncHandler;
 
 /**
  * Presenter接口
@@ -8,7 +11,9 @@ import android.content.Context;
 
 public interface IPresenter<V extends IView> {
 
-    /** BEGIN *************** 与Activity生命周期一致的函数 ********************/
+    /**
+     * BEGIN *************** 与Activity生命周期一致的函数
+     ********************/
 
     void onCreate();
 
@@ -31,5 +36,18 @@ public interface IPresenter<V extends IView> {
      */
     V getView();
 
+    /**
+     * 获取子线程的Handler
+     */
+    AsyncHandler getAsyncHandler();
+
+    /**
+     * 获取默认的Handler
+     */
+    Handler getDefaultHandler();
+
+    /**
+     * 获取上下文对象
+     */
     Context getContext();
 }

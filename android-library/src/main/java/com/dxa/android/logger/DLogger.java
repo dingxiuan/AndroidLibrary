@@ -33,6 +33,13 @@ public class DLogger {
         LEVEL = d ? LogLevel.VERBOSE : LogLevel.NONE;
     }
 
+    /**
+     * 是否为Debug模式
+     */
+    public static boolean isDebug() {
+        return DEBUG;
+    }
+
     /**********************************************************/
     public static final String PATTERN = "yyyy-MM-dd HH:mm:ss.SSS";
 

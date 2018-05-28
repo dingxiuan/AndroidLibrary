@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
@@ -14,6 +15,7 @@ import android.support.annotation.StringRes;
 
 import com.dxa.android.logger.DLogger;
 import com.dxa.android.logger.LogLevel;
+import com.dxa.android.ui.handler.AsyncHandler;
 
 
 /**
@@ -119,6 +121,16 @@ public abstract class FragmentPresenter<V extends IView>
     }
 
     @Override
+    public AsyncHandler getAsyncHandler() {
+        return getView().getAsyncHandler();
+    }
+
+    @Override
+    public Handler getDefaultHandler() {
+        return getView().getDefaultHandler();
+    }
+
+    @Override
     public Context getContext() {
         return getView().getContext();
     }
@@ -128,11 +140,7 @@ public abstract class FragmentPresenter<V extends IView>
     }
 
     public void setDebug(boolean debug) {
-        if (debug) {
-            logger.setLevel(LogLevel.DEBUG);
-        } else {
-            logger.setLevel(LogLevel.NONE);
-        }
+        logger.setLevel(debug ? LogLevel.DEBUG : LogLevel.NONE);
     }
 
     public Resources getResources() {
@@ -140,12 +148,12 @@ public abstract class FragmentPresenter<V extends IView>
     }
 
     @SuppressWarnings("deprecation")
-	public Drawable getDrawable(@DrawableRes int drawId) {
+    public Drawable getDrawable(@DrawableRes int drawId) {
         return getResources().getDrawable(drawId);
     }
 
     @SuppressWarnings("deprecation")
-	public int getColor(@ColorRes int id) {
+    public int getColor(@ColorRes int id) {
         return getResources().getColor(id);
     }
 

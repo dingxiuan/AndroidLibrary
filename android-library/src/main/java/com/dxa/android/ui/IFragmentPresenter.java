@@ -4,15 +4,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
+import com.dxa.android.ui.handler.AsyncHandler;
 
 /**
  * Fragment的Presenter
  */
 public interface IFragmentPresenter<V extends IView> extends IPresenter<V> {
 
-    /** BEGIN *****************  与Fragment生命周期函数一致 ********************/
+    /**
+     * BEGIN *****************  与Fragment生命周期函数一致
+     ********************/
 
     void onAttach();
 
@@ -45,7 +50,8 @@ public interface IFragmentPresenter<V extends IView> extends IPresenter<V> {
 
     void onDetach();
 
-    /** END *****************  与Fragment生命周期函数一致 ********************/
+    /**
+     * END *****************  与Fragment生命周期函数一致 ********************/
 
     void onActivityResult(int requestCode, int resultCode, Intent data);
 
@@ -57,6 +63,12 @@ public interface IFragmentPresenter<V extends IView> extends IPresenter<V> {
 
     @Override
     V getView();
+
+    @Override
+    AsyncHandler getAsyncHandler();
+
+    @Override
+    Handler getDefaultHandler();
 
     @Override
     Context getContext();

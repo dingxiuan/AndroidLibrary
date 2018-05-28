@@ -179,7 +179,7 @@ public abstract class SuperFragment<P extends IFragmentPresenter> extends Fragme
     }
 
     @SuppressWarnings("unchecked")
-    public P getDefaultPresenter() {
+    protected P getDefaultPresenter() {
         return (P) new FragmentPresenter<IView>(this) {
         };
     }

@@ -1,10 +1,12 @@
 package com.dxa.android.ui;
 
 import android.content.Context;
+import android.os.Handler;
 import android.support.annotation.StringRes;
 
 import com.dxa.android.logger.DLogger;
 import com.dxa.android.logger.LogLevel;
+import com.dxa.android.ui.handler.AsyncHandler;
 
 /**
  * Presenter的基类
@@ -63,6 +65,16 @@ public class ActivityPresenter<V extends IView> implements IPresenter<V> {
     @Override
     public V getView() {
         return baseView;
+    }
+
+    @Override
+    public AsyncHandler getAsyncHandler() {
+        return getView().getAsyncHandler();
+    }
+
+    @Override
+    public Handler getDefaultHandler() {
+        return getView().getDefaultHandler();
     }
 
     @Override
