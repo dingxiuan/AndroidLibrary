@@ -59,16 +59,24 @@ public class DLogger {
     private LogLevel level;
 
     public DLogger() {
-        this("DLogger", LogLevel.NONE);
+        this("DLogger", LogLevel.DEBUG);
     }
 
     public DLogger(String tag) {
-        this(tag, LogLevel.NONE);
+        this(tag, LogLevel.DEBUG);
     }
 
     public DLogger(String tag, LogLevel level) {
         this.tag = tag;
         this.level = level;
+    }
+
+    public DLogger(Class<?> clazz) {
+        this(clazz, LogLevel.DEBUG);
+    }
+
+    public DLogger(Class<?> clazz, LogLevel level) {
+        this(clazz.getSimpleName(), level);
     }
 
     public String getTag() {

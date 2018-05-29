@@ -20,11 +20,21 @@ task makeJar(type: Jar) {
     from zipTree(zipFile)
     //将assets目录打入jar包
     baseName = jarName + jarVersion
+//    from fileTree(dir: 'src/main',includes: ['assets/**'])
+//    from fileTree(dir: 'src/main/java',includes: ['com/**/*.java'])
+    destinationDir = file(sdkDestinationPath)
+}
+
+task makeJarSource(type: Jar) {
+//    from zipTree(zipFile)
+    baseName = jarName + jarVersion + "-source"
+    //将assets目录打入jar包
     from fileTree(dir: 'src/main',includes: ['assets/**'])
     from fileTree(dir: 'src/main/java',includes: ['com/**/*.java'])
     destinationDir = file(sdkDestinationPath)
 }
 
 makeJar.dependsOn(deleteBuild, build)
+makeJar.dependsOn(makeJarSource, build)
 
 
