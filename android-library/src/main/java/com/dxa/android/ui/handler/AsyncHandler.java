@@ -47,7 +47,7 @@ public class AsyncHandler {
     private final boolean startNow;
 
     public AsyncHandler() {
-        this(true, true);
+        this(true);
     }
 
     public AsyncHandler(boolean startNow) {
