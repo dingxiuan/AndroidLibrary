@@ -39,8 +39,9 @@ public class FileManager implements IFileManager {
 
     @Override
     public boolean setRoot(File f, boolean force) {
-        if (f == null)
+        if (f == null) {
             throw new IllegalArgumentException("根目录不能为 null ！");
+        }
 
         @SuppressWarnings("unused")
         boolean mkdirs = f.exists() || f.mkdirs();
@@ -77,16 +78,19 @@ public class FileManager implements IFileManager {
         return s;
     }
 
+    @Override
     public File getRoot() {
-        if (!initialized)
+        if (!initialized) {
             throw new IllegalStateException("还未设置根目录!");
+        }
         return root;
     }
 
     @Override
     public boolean setRootPath(String rootPath, boolean force) {
-        if (isEmpty(rootPath))
+        if (isEmpty(rootPath)) {
             throw new IllegalArgumentException("文件根目录的路径不能为空或 null !");
+        }
 
         File f = new File(rootPath);
         return setRoot(f, force);
@@ -94,8 +98,9 @@ public class FileManager implements IFileManager {
 
     @Override
     public String getRootPath() {
-        if (!initialized)
+        if (!initialized) {
             throw new IllegalStateException("还未设置根目录!");
+        }
         return rootPath;
     }
 
@@ -134,13 +139,15 @@ public class FileManager implements IFileManager {
 //    }
 
     private void requiredNotNull(Object o, String error) {
-        if (o == null)
+        if (o == null) {
             throw new NullPointerException(error);
+        }
     }
 
     private void requiredNotEmpty(String s, String error) {
-        if (s == null || s.trim().isEmpty())
+        if (s == null || s.trim().isEmpty()) {
             throw new NullPointerException(error);
+        }
     }
 
     @Override
@@ -225,8 +232,9 @@ public class FileManager implements IFileManager {
 
     @Override
     public boolean deleteFile(String directoryName, String fileName) {
-        if (isEmpty(directoryName))
+        if (isEmpty(directoryName)) {
             return false;
+        }
         String filePath = getFilePath(directoryName);
         File f = new File(filePath, fileName);
         return f.exists() && f.delete();
@@ -279,8 +287,9 @@ public class FileManager implements IFileManager {
     }
 
     private int count(File file) {
-        if (file == null || !file.exists())
+        if (file == null || !file.exists()) {
             return 0;
+        }
         if (file.isDirectory()) {
             int count = 0;
             File[] files = file.listFiles();
@@ -305,12 +314,12 @@ public class FileManager implements IFileManager {
 
     @Override
     public boolean isFile(String directoryName, String fileName) {
-        if (isEmpty(directoryName) || isEmpty(fileName))
+        if (isEmpty(directoryName) || isEmpty(fileName)) {
             return false;
+        }
 
         String filePath = getFilePath(directoryName);
         File file = new File(filePath, fileName);
-        System.out.println("文件路径: "+ file.getAbsolutePath());
         return file.exists();
     }
 

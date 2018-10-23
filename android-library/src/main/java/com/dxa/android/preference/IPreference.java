@@ -85,11 +85,6 @@ public interface IPreference {
 	<T> T get(String key, DataType type);
 	
 	/**
-	 * 获取存储的值或默认值
-	 */
-	<T> T get(String ket, T defaultValue);
-
-	/**
 	 * 取出全部数据
 	 */
 	Map<String, ?> getAll();
