@@ -8,8 +8,8 @@ apply from: "${rootProject.getProjectDir()}/buildSystem/AndroidConfig.gradle"
 apply from: "${rootProject.getProjectDir()}/buildSystem/make-jar.gradle"
 
 dependencies {
-    api fileTree(include: ['*.jar'], dir: 'libs')
-
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    testImplementation 'junit:junit:4.12'
     // ormlite
     implementation 'com.j256.ormlite:ormlite-core:5.0'
     implementation 'com.j256.ormlite:ormlite-android:5.0'
