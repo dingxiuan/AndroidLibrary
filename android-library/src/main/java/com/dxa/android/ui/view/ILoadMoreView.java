@@ -1,23 +1,31 @@
 package com.dxa.android.ui.view;
 
+import java.util.List;
+
 /**
  * 加载更多
  */
 
-public interface ILoadMoreView {
+public interface ILoadMoreView<Item> {
+    /**
+     * 加载更多
+     */
+    void loadMoreStart();
 
     /**
      * 当加载更多时
      */
-    void loadMore();
+    void addItems(List<Item> items);
 
     /**
-     * 刷新完成
+     * 加载更多完成
      */
     void loadMoreCompleted();
 
     /**
      * 加载更多失败
+     *
+     * @param errorMsg 错误信息
      */
-    void loadMoreFailed();
+    void loadMoreFailed(String errorMsg);
 }
