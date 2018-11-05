@@ -6,7 +6,7 @@ android {
 }
 
 def jarName = getName();
-def jarVersion = "-v2.7.3";
+def jarVersion = "-v2.7.4";
 def sdkDestinationPath = "build";
 def zipFile = file('build/intermediates/intermediate-jars/debug/classes.jar')
 
