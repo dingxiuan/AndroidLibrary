@@ -38,10 +38,10 @@ public class AsyncHandler {
         return "AsyncHandler-" + COUNTER.incrementAndGet();
     }
 
-    private final DLogger logger = new DLogger();
+    private final DLogger logger = new DLogger(AsyncHandler.class);
 
-    private Thread currentThread;
-    private Handler handler;
+    private final Thread currentThread;
+    private volatile Handler handler =  new Handler();
 
     private volatile Looper looper;
     private final boolean startNow;
@@ -56,7 +56,23 @@ public class AsyncHandler {
 
     public AsyncHandler(boolean isDaemon, boolean startNow) {
         this.startNow = startNow;
-        this.currentThread = new Thread(r);
+        this.currentThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (currentThread != Thread.currentThread() || looper != null) {
+                    return;
+                }
+
+                if (looper == null) {
+                    Looper.prepare();
+                    looper = Looper.myLooper();
+                    handler = new Handler(looper);
+                    logger.i("Looper开始");
+                    Looper.loop();
+                    logger.i("Looper结束");
+                }
+            }
+        });
         this.currentThread.setDaemon(isDaemon);
         this.currentThread.setName(getThreadName());
 
@@ -104,10 +120,6 @@ public class AsyncHandler {
             return;
         }
 
-        if (startNow) {
-            return;
-        }
-
         currentThread.start();
     }
 
@@ -118,23 +130,5 @@ public class AsyncHandler {
             logger.i("停止");
         }
     }
-
-    private final Runnable r = new Runnable() {
-        @Override
-        public void run() {
-            if (currentThread != Thread.currentThread() || looper != null) {
-                return;
-            }
-
-            if (looper == null) {
-                Looper.prepare();
-                looper = Looper.myLooper();
-                handler = new Handler(looper);
-                logger.i("Looper开始");
-                Looper.loop();
-                logger.i("Looper结束");
-            }
-        }
-    };
 
 }
