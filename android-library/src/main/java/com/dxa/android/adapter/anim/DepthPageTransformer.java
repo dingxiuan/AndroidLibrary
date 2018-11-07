@@ -1,19 +1,18 @@
 package com.dxa.android.adapter.anim;
 
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager.PageTransformer;
 import android.view.View;
 
 /**
  * @description: 这个Page Transformer使用默认动画的屏幕左滑动画。但是为右滑使用一种“潜藏”效
  * 果的动画。潜藏动画将page淡出，并且线性缩小它。
- * <p/>
- * {@link http://hukai.me/android-training-course-in-chinese/animations/screen-slide.html#Depth Page Transformer}
  */
-
 class DepthPageTransformer implements PageTransformer {
     private static final float MIN_SCALE = 0.75f;
 
-    public void transformPage(View view, float position) {
+    @Override
+    public void transformPage(@NonNull View view, float position) {
         int pageWidth = view.getWidth();
 
         if (position < -1) { // [-Infinity,-1)
@@ -35,8 +34,7 @@ class DepthPageTransformer implements PageTransformer {
             view.setTranslationX(pageWidth * -position);
 
             // Scale the page down (between MIN_SCALE and 1)
-            float scaleFactor = MIN_SCALE
-                    + (1 - MIN_SCALE) * (1 - Math.abs(position));
+            float scaleFactor = MIN_SCALE + (1 - MIN_SCALE) * (1 - Math.abs(position));
             view.setScaleX(scaleFactor);
             view.setScaleY(scaleFactor);
 

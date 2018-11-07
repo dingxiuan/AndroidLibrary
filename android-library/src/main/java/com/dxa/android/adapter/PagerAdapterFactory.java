@@ -9,7 +9,6 @@ import java.util.List;
 /**
  * Adapter工厂
  */
-
 public class PagerAdapterFactory {
 
     private PagerAdapterFactory() {
@@ -37,16 +36,16 @@ public class PagerAdapterFactory {
 
     public static CommonFragmentPagerAdapter newCommonFragmentPagerAdapter(
             FragmentManager fm, List<Fragment> views) {
-        return new CommonFragmentPagerAdapter(fm, views);
+        return new CommonFragmentPagerAdapter<>(fm, views);
     }
 
     public static CommonFragmentPagerAdapter newCommonFragmentPagerAdapter(
             FragmentManager fm, List<Fragment> views, List<String> titles) {
-        return new CommonFragmentPagerAdapter(fm, views, titles);
+        return new CommonFragmentPagerAdapter<>(fm, views, titles);
     }
 
     public static CommonFragmentPagerAdapter newCommonFragmentPagerAdapter(
             FragmentManager fm, List<Fragment> views, String[] titles) {
-        return new CommonFragmentPagerAdapter(fm, views, titles);
+        return new CommonFragmentPagerAdapter<>(fm, views, titles);
     }
 }

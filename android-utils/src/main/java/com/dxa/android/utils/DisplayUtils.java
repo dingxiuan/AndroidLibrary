@@ -102,10 +102,7 @@ public final class DisplayUtils {
      * @return 屏幕宽度
      */
     public static int getScreenW(Activity activity) {
-        DisplayMetrics dm ;
-        dm = activity.getResources().getDisplayMetrics();
-        int w = dm.widthPixels;
-        return w;
+        return activity.getResources().getDisplayMetrics().widthPixels;
     }
 
     /**

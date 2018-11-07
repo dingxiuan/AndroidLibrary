@@ -1,12 +1,11 @@
 package com.dxa.common;
 
-import java.lang.ref.SoftReference;
-import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 /**
  * 日期格式化：
@@ -73,10 +72,10 @@ public final class DateFormatter {
     /**
      * 缓存时间格式化
      */
-    private static final ConcurrentHashMap<String, SoftReference<SecureDateFormat>> FORMAT_CACHE;
+    private static final Map<String, SimpleDateFormat> FORMAT_CACHE;
 
     static {
-        FORMAT_CACHE = new ConcurrentHashMap<>();
+        FORMAT_CACHE = new WeakHashMap<>();
     }
 
     private DateFormatter() {
@@ -85,18 +84,12 @@ public final class DateFormatter {
     /**
      * 获取SimpleDateFormat
      */
-    public static SecureDateFormat getSDF(String pattern) {
-        SoftReference<SecureDateFormat> reference = FORMAT_CACHE.get(pattern);
-        SecureDateFormat sdf = null;
-        if (reference != null) {
-            sdf = reference.get();
-        }
-
-        synchronized (DateFormatter.class) {
-            if (sdf == null) {
-                sdf = new SecureDateFormat(pattern);
-                reference = new SoftReference<>(sdf);
-                FORMAT_CACHE.put(pattern, reference);
+    public static SimpleDateFormat getSDF(String pattern) {
+        SimpleDateFormat sdf = FORMAT_CACHE.get(pattern);
+        if (sdf == null) {
+            synchronized (FORMAT_CACHE) {
+                sdf = new SimpleDateFormat(pattern, Locale.getDefault());
+                FORMAT_CACHE.put(pattern, sdf);
             }
         }
         return sdf;
@@ -105,30 +98,27 @@ public final class DateFormatter {
     /**
      * 解析字符串类型的时间
      */
-    public static Date parseOrThrows(String time, SecureDateFormat sdf) throws ParseException {
-        if (Checker.isBlank(time) || Checker.isNull(sdf))
+    private static Date parseOrThrows(String time, SimpleDateFormat sdf) throws ParseException {
+        if (Checker.isBlank(time) || Checker.isNull(sdf)) {
             return null;
-        synchronized (sdf.lock) {
-            return sdf.parse(time);
         }
+        return sdf.parse(time);
     }
 
     /**
      * 解析字符串类型的时间
      */
     public static Date parseOrThrows(String time, String pattern) throws ParseException {
-        if (Checker.hasBlank(time, pattern))
-            return null;
-        SecureDateFormat sdf = getSDF(pattern);
-        return parseOrThrows(time, sdf);
+        return getSDF(pattern).parse(time);
     }
 
     /**
      * 解析字符串类型的时间
      */
-    public static Date parse(String time, SecureDateFormat sdf) {
-        if (Checker.hasNull(time, sdf))
+    private static Date parse(String time, SimpleDateFormat sdf) {
+        if (Checker.hasNull(time, sdf)) {
             return null;
+        }
         try {
             return parseOrThrows(time, sdf);
         } catch (ParseException e) {
@@ -147,9 +137,10 @@ public final class DateFormatter {
      * 解析字符串类型的时间
      */
     public static Date parse(String time, String pattern) {
-        if (Checker.hasNull(time, pattern))
+        if (Checker.hasNull(time, pattern)) {
             return null;
-        SecureDateFormat sdf = getSDF(pattern);
+        }
+        SimpleDateFormat sdf = getSDF(pattern);
         return parse(time, sdf);
     }
 
@@ -181,38 +172,14 @@ public final class DateFormatter {
      * 格式化日期
      */
     public static String format(Date time, String pattern) {
-        if (Checker.hasNull(time, pattern))
-            return null;
-        SecureDateFormat sdf = getSDF(pattern);
-        return format(time, sdf);
+        return getSDF(pattern).format(time);
     }
 
     /**
      * 格式化日期
      */
     public static String format(long time, String pattern) {
-        if (Checker.isNull(pattern))
-            return null;
-        SecureDateFormat sdf = getSDF(pattern);
-        return format(time, sdf);
-    }
-
-    /**
-     * 格式化日期
-     */
-    public static String format(Date time, SecureDateFormat sdf) {
-        synchronized (sdf.lock) {
-            return sdf.format(time);
-        }
-    }
-
-    /**
-     * 格式化日期
-     */
-    public static String format(long time, SecureDateFormat sdf) {
-        synchronized (sdf.lock) {
-            return sdf.format(time);
-        }
+        return getSDF(pattern).format(time);
     }
 
     /**
@@ -222,8 +189,7 @@ public final class DateFormatter {
      * @return 返回格式化好的时间字符串
      */
     public static String formatNow(String pattern) {
-        SecureDateFormat sdf = getSDF(pattern);
-        return format(System.currentTimeMillis(), sdf);
+        return getSDF(pattern).format(System.currentTimeMillis());
     }
 
     /**
@@ -232,41 +198,8 @@ public final class DateFormatter {
      * @return 返回格式化好的时间字符串
      */
     public static String formatNow() {
-        SecureDateFormat sdf = getSDF(yMdHms);
-        return format(System.currentTimeMillis(), sdf);
+        return getSDF(yMdHms).format(System.currentTimeMillis());
     }
 
-    public static class SecureDateFormat extends SimpleDateFormat {
-
-        /**
-         *
-         */
-        private static final long serialVersionUID = -2122594483902414276L;
-
-        private final Object lock = new Object();
-
-        public SecureDateFormat() {
-            super();
-        }
-
-        public SecureDateFormat(String pattern, DateFormatSymbols formatSymbols) {
-            super(pattern, formatSymbols);
-        }
-
-        public SecureDateFormat(String pattern, Locale locale) {
-            super(pattern, locale);
-        }
-
-        public SecureDateFormat(String pattern) {
-            super(pattern);
-        }
-
-        /**
-         * 获取当前对象的锁
-         */
-        public final synchronized Object getLock() {
-            return lock;
-        }
-    }
 
 }

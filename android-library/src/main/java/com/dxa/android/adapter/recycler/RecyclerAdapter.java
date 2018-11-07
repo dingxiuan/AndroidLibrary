@@ -1,25 +1,32 @@
 package com.dxa.android.adapter.recycler;
 
+import android.content.Context;
+import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
+
+import com.dxa.android.adapter.recycler.IRefresh;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import android.content.Context;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 /**
  * RecyclerView的Adapter
  */
-public abstract class RecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
+public abstract class RecyclerAdapter<T, VH extends RecyclerAdapter.ViewHolder>
         extends RecyclerView.Adapter<VH> implements IRefresh<T> {
 
     private final Context context;
     private final ArrayList<T> items;
     private final LayoutInflater inflater;
+
+    private OnItemClickListener<T> listener;
 
     /**
      * 是否包含重复对象，默认不包含
@@ -41,18 +48,29 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
             items.addAll(data);
         }
     }
-    
-    @Override
-    public abstract VH onCreateViewHolder(ViewGroup parent, int viewType);
 
     @Override
-    public abstract void onBindViewHolder(VH holder, int position);
+    public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return onCreateViewHolder(inflater, parent, viewType);
+    }
+
+    public abstract VH onCreateViewHolder(LayoutInflater inflater, @NonNull ViewGroup parent, int viewType);
+
+    @Override
+    public void onBindViewHolder(VH holder, int position) {
+        holder.setData(getItem(position), position, listener);
+    }
+
+    @Override
+    public void onBindViewHolder(VH holder, int position, List<Object> payloads) {
+        super.onBindViewHolder(holder, position, payloads);
+    }
 
     @Override
     public int getItemCount() {
-    	return getCount();
+        return getCount();
     }
-    
+
     @Override
     public int getCount() {
         return items.size();
@@ -70,6 +88,11 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
      */
     protected LayoutInflater getInflater() {
         return inflater;
+    }
+
+    @SuppressWarnings("unchecked")
+    protected <V extends View> V getView(@LayoutRes int resId, ViewGroup parent) {
+        return (V) getInflater().inflate(resId, parent, false);
     }
 
     @Override
@@ -119,8 +142,9 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
         if (!repeat) {
             ArrayList<T> tempList = new ArrayList<>();
             for (T t : list) {
-                if (!contains(t))
+                if (!contains(t)) {
                     tempList.add(t);
+                }
             }
             list = tempList;
 
@@ -161,9 +185,11 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
     @Override
     public boolean remove(int from, int to) {
         if (from > to && contains(from) && contains(to)) {
+            ArrayList<T> removedList = new ArrayList<>();
             for (int i = from; i < to; i++) {
-                items.remove(from);
+                removedList.add(items.get(i));
             }
+            items.removeAll(removedList);
             notifyItemMoved(from, to);
             return true;
         }
@@ -179,7 +205,7 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
     @Override
     public boolean removeAll(Collection<T> subItems) {
         if (subItems != null && subItems.size() > 0) {
-        	boolean removeAll = items.removeAll(subItems);
+            boolean removeAll = items.removeAll(subItems);
             notifyDataSetChanged();
             return removeAll;
         }
@@ -223,17 +249,67 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerView.ViewHolder>
     public boolean isRepeat() {
         return repeat;
     }
-    
+
     /**
-     * 当Item被点击时的回调
+     * 添加当Item被点击时的监听
      */
-    public interface OnItemClickListener {
-    	/**
-    	 * 当Item被点击时的回调
-    	 * @param parent 父容器
-    	 * @param view 点击的View
-    	 * @param position View位置
-    	 */
-    	void onItemClick(ViewGroup parent, View view, int position);
+    public void addOnItemClickListener(OnItemClickListener<T> listener) {
+        this.listener = listener;
     }
+
+    /**
+     * 当Item被点击时的监听
+     */
+    public interface OnItemClickListener<T> {
+        /**
+         * 当Item被点击时的回调
+         *
+         * @param parentView 点击的View
+         * @param t          对应的Item
+         * @param position   View位置
+         */
+        void onItemClick(View parentView, T t, int position);
+    }
+
+
+    public static class ViewHolder<T> extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        private OnItemClickListener<T> listener;
+        private T item;
+        private int position;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        public void setListener(OnItemClickListener<T> listener) {
+            this.listener = listener;
+        }
+
+        /**
+         * 设置Item的数据
+         *
+         * @param item     ITEM
+         * @param position 位置
+         */
+        public final void setData(T item, int position, OnItemClickListener<T> listener) {
+            this.listener = listener;
+            this.item = item;
+            this.position = position;
+            setData(item, position);
+        }
+
+        public void setData(T item, int position) {
+            // ~
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (listener != null) {
+                listener.onItemClick(v, item, position);
+            }
+        }
+    }
+
 }

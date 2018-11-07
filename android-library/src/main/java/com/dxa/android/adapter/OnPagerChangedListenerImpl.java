@@ -10,6 +10,9 @@ public class OnPagerChangedListenerImpl implements ViewPager.OnPageChangeListene
 
     protected PagerAdapter adapter;
 
+    public OnPagerChangedListenerImpl() {
+    }
+
     public OnPagerChangedListenerImpl(PagerAdapter adapter) {
         this.adapter = adapter;
     }
@@ -27,5 +30,9 @@ public class OnPagerChangedListenerImpl implements ViewPager.OnPageChangeListene
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    public PagerAdapter getAdapter() {
+        return adapter;
     }
 }

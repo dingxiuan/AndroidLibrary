@@ -1,7 +1,4 @@
 
-include ':android-library'
+include ':android-library', ':js-bridge', ':EcgDraw'
 include ':android-utils'
 
-include ':loading-dialog'
-
-include ':loading-dialog-sample'

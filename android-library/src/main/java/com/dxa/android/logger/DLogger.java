@@ -8,8 +8,10 @@ import java.util.Locale;
 /**
  * 打印日志
  */
-
 public class DLogger {
+    public static DLogger getLogger(Class<?> clazz){
+        return new DLogger(clazz);
+    }
     /**
      * 默认的日志对象
      */

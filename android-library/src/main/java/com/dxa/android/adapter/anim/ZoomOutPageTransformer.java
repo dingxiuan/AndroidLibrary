@@ -1,20 +1,20 @@
 package com.dxa.android.adapter.anim;
 
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager.PageTransformer;
 import android.view.View;
 
 /**
  * @description: 当在相邻界面滑动时，这个Page Transformer使页面收缩并褪色。
  * 当页面越靠近中心，它将渐渐还原到正常大小并且图像渐入。
- * <p/>
- * {@link http://hukai.me/android-training-course-in-chinese/animations/screen-slide.html#Depth Page Transformer}
  */
 class ZoomOutPageTransformer implements PageTransformer {
 
     private static final float MIN_SCALE = 0.85f;
     private static final float MIN_ALPHA = 0.5f;
 
-    public void transformPage(View view, float position) {
+    @Override
+    public void transformPage(@NonNull View view, float position) {
         int pageWidth = view.getWidth();
         int pageHeight = view.getHeight();
 
@@ -38,9 +38,7 @@ class ZoomOutPageTransformer implements PageTransformer {
             view.setScaleY(scaleFactor);
 
             // Fade the page relative to its size.
-            view.setAlpha(MIN_ALPHA +
-                    (scaleFactor - MIN_SCALE) /
-                            (1 - MIN_SCALE) * (1 - MIN_ALPHA));
+            view.setAlpha(MIN_ALPHA + (scaleFactor - MIN_SCALE) / (1 - MIN_SCALE) * (1 - MIN_ALPHA));
 
         } else { // (1,+Infinity]
             // This page is way off-screen to the right.
