@@ -12,6 +12,7 @@ import java.util.ArrayList;
 /**
  * 权限帮助类
  */
+@Deprecated
 @SuppressLint("NewApi")
 public class PermissionHelper {
 

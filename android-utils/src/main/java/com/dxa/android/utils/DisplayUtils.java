@@ -18,6 +18,7 @@ package com.dxa.android.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.inputmethod.InputMethodManager;
 
 /**
@@ -114,8 +115,7 @@ public final class DisplayUtils {
     public static int getScreenH(Activity activity) {
         DisplayMetrics dm = new DisplayMetrics();
         dm = activity.getResources().getDisplayMetrics();
-        int h = dm.heightPixels;
-        return h;
+        return dm.heightPixels;
     }
 
     /**
@@ -133,4 +133,21 @@ public final class DisplayUtils {
         }
     }
 
+    public int getColorPrimary(Context context) {
+        return getColor(context, R.attr.colorPrimary);
+    }
+
+    public int getDarkColorPrimary(Context context) {
+        return getColor(context, R.attr.colorPrimaryDark);
+    }
+
+    public int getColorAccent(Context context) {
+        return getColor(context, R.attr.colorAccent);
+    }
+
+    public int getColor(Context context, int resid) {
+        TypedValue typedValue = new TypedValue();
+        context.getTheme().resolveAttribute(resid, typedValue, true);
+        return typedValue.data;
+    }
 }

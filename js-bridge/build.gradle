@@ -1,0 +1,69 @@
+apply plugin: 'com.android.library'
+
+// 引入公共依赖
+apply from: "${rootProject.getProjectDir()}/buildSystem/AndroidConfig.gradle"
+
+// 将代码打成jar包
+apply from: "${rootProject.getProjectDir()}/buildSystem/make-jar.gradle"
+
+//android {
+//    compileSdkVersion 28
+//    buildToolsVersion '28.0.3'
+//
+//    defaultConfig {
+//        minSdkVersion 14
+//        targetSdkVersion 28
+//        versionCode 1
+//        versionName version
+//
+//        multiDexEnabled true
+//    }
+//    buildTypes {
+//        release {
+//            minifyEnabled false
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//        }
+//    }
+//    lintOptions { // 消除lint警告
+//        abortOnError false
+//        checkReleaseBuilds false
+//    }
+//
+//    //java版本
+//    compileOptions {
+//        sourceCompatibility JavaVersion.VERSION_1_8
+//        targetCompatibility JavaVersion.VERSION_1_8
+//    }
+//
+//}
+
+dependencies {
+    api fileTree(dir: 'libs', include: ['*.jar'])
+//    api fileTree(dir: 'libs-x5', include: ['*.jar'])
+
+    implementation project(":android-library")
+
+}
+
+//def siteUrl = 'https://github.com/lzyzsd/JsBridge'
+//def gitUrl = 'https://github.com/lzyzsd/JsBridge.git'
+//apply plugin: 'com.github.dcendents.android-maven'
+//group = "com.github.lzyzsd.jsbridge"
+//task sourcesJar(type: Jar) {
+//    from android.sourceSets.main.java.srcDirs
+//    classifier = 'sources'
+//}
+//task javadoc(type: Javadoc) {
+//    source = android.sourceSets.main.java.srcDirs
+//    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+//}
+//task javadocJar(type: Jar, dependsOn: javadoc) {
+//    classifier = 'javadoc'
+//    from javadoc.destinationDir
+//}
+//artifacts {
+//    archives javadocJar
+//    archives sourcesJar
+//}
+//Properties properties = new Properties()
+//properties.load(project.rootProject.file('local.properties').newDataInputStream())

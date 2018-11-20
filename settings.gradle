@@ -1,4 +1,8 @@
 
-include ':android-library', ':js-bridge', ':EcgDraw'
+include ':android-library'
 include ':android-utils'
+
+include ':js-bridge'
+
+include ':ecg-draw'
 

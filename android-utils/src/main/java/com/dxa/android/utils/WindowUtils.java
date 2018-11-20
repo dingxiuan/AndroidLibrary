@@ -58,6 +58,10 @@ public final class WindowUtils {
         }
     }
 
+    private static Configuration getConfiguration(Context context){
+        return context.getResources().getConfiguration();
+    }
+
     /**
      * 当前是否是横屏
      *
@@ -65,7 +69,7 @@ public final class WindowUtils {
      * @return
      */
     public static boolean isLandscape(Context context) {
-        return context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+        return getConfiguration(context).orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
 
     /**
@@ -75,7 +79,8 @@ public final class WindowUtils {
      * @return
      */
     public static boolean isPortrait(Context context) {
-        return context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
+        return getConfiguration(context).orientation == Configuration.ORIENTATION_PORTRAIT;
     }
+
 
 }

@@ -9,9 +9,10 @@ import java.util.Locale;
  * 打印日志
  */
 public class DLogger {
-    public static DLogger getLogger(Class<?> clazz){
+    public static DLogger getLogger(Class<?> clazz) {
         return new DLogger(clazz);
     }
+
     /**
      * 默认的日志对象
      */
@@ -26,6 +27,7 @@ public class DLogger {
      */
     private static boolean DEBUG = false;
 
+    public static String TAG = "DLogger";
 
     /**
      * 设置是否打印日志
@@ -40,6 +42,10 @@ public class DLogger {
      */
     public static boolean isDebug() {
         return DEBUG;
+    }
+
+    public static void setGlobalTag(String tag) {
+        DLogger.TAG = tag;
     }
 
     /**********************************************************/
@@ -61,7 +67,7 @@ public class DLogger {
     private LogLevel level;
 
     public DLogger() {
-        this("DLogger", LogLevel.DEBUG);
+        this(TAG, LogLevel.DEBUG);
     }
 
     public DLogger(String tag) {
