@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    android:layout_height="match_parent"
+    android:gravity="center">
 
     <FrameLayout
         android:id="@+id/parent_container"
@@ -12,10 +10,10 @@
         android:layout_height="200dp"
         android:layout_gravity="center">
 
-        <com.dxa.androidview.widget.DrawSurfaceView
-            android:id="@+id/surface_view"
+        <com.dxa.androidview.widget.EcgTextureView
+            android:id="@+id/texture_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
 
     </FrameLayout>
 

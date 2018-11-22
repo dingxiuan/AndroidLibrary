@@ -6,7 +6,7 @@ import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 
-public class SimpleWebClientListener implements SimpleWebClient.Listener {
+public class SimpleWebClientListener implements BasicWebClient.Listener {
 
 
     private SwipeRefreshLayout refreshLayout;

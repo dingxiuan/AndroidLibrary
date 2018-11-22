@@ -1,21 +1,25 @@
 package com.github.lzyzsd.jsbridge.ui;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.dxa.android.ui.FragmentPresenter;
 import com.dxa.android.ui.SuperFragment;
+import com.dxa.android.utils.RUtils;
 import com.github.lzyzsd.library.R;
 
 
-public abstract class BaseWebViewFragment<P extends FragmentPresenter> extends SuperFragment<P> {
+public class BasicWebViewFragment<P extends FragmentPresenter> extends SuperFragment<P> {
     /**
      * 新建WebViewFragment
      */
-    public static <T extends BaseWebViewFragment> T newInstance(T fragment, String tagName, String originalUrl) {
+    public static <T extends BasicWebViewFragment> T newInstance(T fragment, String tagName, String originalUrl) {
         Bundle args = new Bundle();
         args.putString(TAG_NAME, tagName);
         args.putString(TAG_URL, originalUrl);
@@ -30,9 +34,9 @@ public abstract class BaseWebViewFragment<P extends FragmentPresenter> extends S
     private String tagName;
     private String originalUrl;
 
-    private WebViewTemplate webViewTemplate;
+    private WebViewTemplate template;
 
-    public BaseWebViewFragment() {
+    public BasicWebViewFragment() {
         // ~
     }
 
@@ -45,7 +49,7 @@ public abstract class BaseWebViewFragment<P extends FragmentPresenter> extends S
             tagName = arguments.getString(TAG_NAME);
             originalUrl = arguments.getString(TAG_URL);
         }
-        getWebViewTemplate().setOriginalUrl(originalUrl);
+        getTemplate().setOriginalUrl(originalUrl);
     }
 
     @Nullable
@@ -57,19 +61,21 @@ public abstract class BaseWebViewFragment<P extends FragmentPresenter> extends S
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getWebViewTemplate().onInitialView(view);
+        WebViewTemplate template = getTemplate();
+        template.initializeView(view);
+        onInitializeToolbar(template.getToolbar());
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        getWebViewTemplate().getWebView().onResume();
+        getTemplate().getWebView().onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        getWebViewTemplate().getWebView().onPause();
+        getTemplate().getWebView().onPause();
     }
 
     @Override
@@ -83,16 +89,30 @@ public abstract class BaseWebViewFragment<P extends FragmentPresenter> extends S
         return null;
     }
 
+
+    protected void onInitializeToolbar(Toolbar toolbar) {
+        int colorPrimaryDark = RUtils.getColor(getContext(), "colorPrimaryDark");
+        toolbar.setBackgroundColor(colorPrimaryDark > 0 ? colorPrimaryDark : Color.BLACK);
+        toolbar.setVisibility(View.GONE);
+    }
+
     public String getTagName() {
         return tagName;
     }
 
-    public WebViewTemplate getWebViewTemplate() {
-        if (webViewTemplate == null) {
-            synchronized (this) {
-                webViewTemplate = new WebViewTemplate(getContext());
-            }
+
+    public WebViewTemplate getTemplate() {
+        if (template == null) {
+            this.template = createTemplate();
         }
-        return webViewTemplate;
+        return template;
     }
+
+    /**
+     * 创建WebView的模板
+     */
+    protected WebViewTemplate createTemplate() {
+        return new WebViewTemplate();
+    }
+
 }

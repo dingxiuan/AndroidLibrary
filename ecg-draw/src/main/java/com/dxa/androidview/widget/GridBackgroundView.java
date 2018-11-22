@@ -100,10 +100,8 @@ public class GridBackgroundView extends View {
          * （2）种是填满屏幕，会出现不是大网格粗线结尾
          */
 
-        // (1)网格数
         heightCount = (height / (gridSize * smallGridCount)) * smallGridCount;
-        //(2)网格数
-        widthCount = width / gridSize;
+        widthCount = (width / (gridSize * smallGridCount)) * smallGridCount;
 
         lineWidth = gridSize * widthCount;
         //为保持横向有20个大格子(代表是5秒心电)

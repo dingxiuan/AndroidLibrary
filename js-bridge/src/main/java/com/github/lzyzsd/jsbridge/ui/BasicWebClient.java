@@ -9,13 +9,13 @@ import com.dxa.android.logger.DLogger;
 import com.github.lzyzsd.jsbridge.BridgeWebView;
 import com.github.lzyzsd.jsbridge.BridgeWebViewClient;
 
-public class SimpleWebClient extends BridgeWebViewClient {
+public class BasicWebClient extends BridgeWebViewClient {
 
-    protected final DLogger logger = new DLogger(SimpleWebClient.class);
+    protected final DLogger logger = new DLogger(BasicWebClient.class);
 
     private Listener listener = _DEFAULT_LISTENER;
 
-    public SimpleWebClient(BridgeWebView webView) {
+    public BasicWebClient(BridgeWebView webView) {
         super(webView);
     }
 

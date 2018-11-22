@@ -10,24 +10,18 @@ import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.util.AttributeSet;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
+import android.view.TextureView;
 
 import com.dxa.android.logger.DLogger;
-
-import java.util.Arrays;
 
 /**
  * 绘制的SurfaceView：使用Timer开启TimerTask绘制图形
  */
-public class DrawSurfaceView extends SurfaceView {
+public class EcgTextureView extends TextureView {
 
-    private static final DLogger LOGGER = new DLogger(DrawSurfaceView.class);
+    private static final DLogger LOGGER = new DLogger(EcgTextureView.class);
 
 
-    private Path path;
-    private Paint paint = null;
-    private Canvas cacheCanvas = null;
     private int scalePoint = 0;
     private int currentPoint = 0;
     private int maxPoint = 0;
@@ -40,8 +34,11 @@ public class DrawSurfaceView extends SurfaceView {
 
     private volatile boolean initFlag = false;
 
+    private Path path = new Path();
+    private Paint pathPaint;
     private Paint clearPaint;
-
+    private Bitmap bitmapCache;
+    private Canvas canvasCache = new Canvas();
 
     // 大网格
     private Paint thickPaint;
@@ -49,8 +46,6 @@ public class DrawSurfaceView extends SurfaceView {
     private Paint thinPaint;
     // 粗线条
     private Paint xAxisPaint;
-
-    private final PorterDuffXfermode xfermode = new PorterDuffXfermode(PorterDuff.Mode.SRC);
 
     // 画横线
     private int heightCount;
@@ -77,38 +72,28 @@ public class DrawSurfaceView extends SurfaceView {
 
     private int halfHeight = 0;
 
-    public DrawSurfaceView(Context context) {
+    public EcgTextureView(Context context) {
         this(context, null);
     }
 
-    public DrawSurfaceView(Context context, AttributeSet attrs) {
+    public EcgTextureView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public DrawSurfaceView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public EcgTextureView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        cacheCanvas = new Canvas();
-        path = new Path();
-
-//        paint = new Paint(Paint.DITHER_FLAG);
-//        paint.setColor(Color.GREEN);
-//        paint.setStyle(Paint.Style.STROKE);
-//        paint.setStrokeWidth(2);
-//        paint.setAntiAlias(true);
-//        paint.setDither(true);
-
-        paint = createNormalPaint(Color.GREEN, 2);
-
+        pathPaint = createNormalPaint(Color.GREEN, 2);
         currentPoint = 0;
         clearPaint = new Paint();
-        clearPaint.setAntiAlias(true);
-//        PorterDuffXfermode xfermode = new PorterDuffXfermode(PorterDuff.Mode.CLEAR);
-        clearPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
-        clearPaint.setXfermode(xfermode);
+        clearPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
 
-        // 设置背景
-        initialize();
+        // 大网格的线
+        thickPaint = createNormalPaint(Color.parseColor("#1b4200"), thickLineWidth);
+        // 小网格的线
+        thinPaint = createNormalPaint(Color.parseColor("#092100"), thinLineWidth);
+        // X 轴的线
+        xAxisPaint = createNormalPaint(Color.BLACK, xAxis);
     }
 
     @Override
@@ -130,8 +115,10 @@ public class DrawSurfaceView extends SurfaceView {
          * （2）种是填满屏幕，会出现不是大网格粗线结尾
          */
 
+        // (1)网格数
         heightCount = (height / (gridSize * smallGridCount)) * smallGridCount;
-        widthCount = (width / (gridSize * smallGridCount)) * smallGridCount;
+        //(2)网格数
+        widthCount = width / gridSize;
 
         lineWidth = gridSize * widthCount;
         //为保持横向有20个大格子(代表是5秒心电)
@@ -152,27 +139,14 @@ public class DrawSurfaceView extends SurfaceView {
      * @return
      */
     private Paint createNormalPaint(int color, float strokeWidth) {
-        Paint paint = new Paint();
+        Paint paint = new Paint(Paint.DITHER_FLAG);
         paint.setColor(color);
         paint.setStrokeWidth(strokeWidth);
         paint.setStrokeJoin(Paint.Join.ROUND);
         paint.setStyle(Paint.Style.STROKE);
         paint.setAntiAlias(true);
+        paint.setDither(true);
         return paint;
-    }
-
-    /**
-     * 初始化画笔
-     */
-    private void initialize() {
-        // 大网格的线
-        thickPaint = createNormalPaint(Color.parseColor("#1b4200"), thickLineWidth);
-
-        // 小网格的线
-        thinPaint = createNormalPaint(Color.parseColor("#092100"), thinLineWidth);
-        // X 轴的线
-        xAxisPaint = createNormalPaint(Color.BLACK, xAxis);
-        xAxisPaint.setStyle(Paint.Style.STROKE);
     }
 
     /**
@@ -241,13 +215,13 @@ public class DrawSurfaceView extends SurfaceView {
     }
 
 
-    public void clear(Canvas canvas) {
-        cacheCanvas.drawPaint(clearPaint);
-        currentPoint = 0;
+    public void clear(Canvas canvas, Path path, Paint clearPaint) {
+        canvas.drawPaint(clearPaint);
         path.reset();
         canvas.drawColor(Color.BLACK, PorterDuff.Mode.SRC);
-        canvas.drawPath(path, paint);
         drawGridBackground(canvas);
+        canvas.drawPath(path, pathPaint);
+        currentPoint = 0;
     }
 
     public boolean isReady() {
@@ -256,7 +230,6 @@ public class DrawSurfaceView extends SurfaceView {
         }
     }
 
-    private Bitmap bitmapCache;
 
     public void updatePoint(Canvas canvas, int point) {
         if (!initFlag) {
@@ -265,26 +238,23 @@ public class DrawSurfaceView extends SurfaceView {
 
         if (bitmapCache == null) {
             bitmapCache = Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
+            canvasCache.setBitmap(bitmapCache);
         }
 
-        Canvas tempCanvas = new Canvas(bitmapCache);
-
         if (currentPoint == 0) {
-            clear(tempCanvas);
+            clear(canvasCache, path, clearPaint);
         }
 
         float y = this.getBottom() - ((point - minPoint) * scaleHeight);
         float x = this.getLeft() + currentPoint * scaleWidth;
-//        LOGGER.i("point(", point, ") ==>: (", x, ", ", y, ")");
 
         if (currentPoint == 0) {
-            clear(tempCanvas);
             path.moveTo(x, y);
             currentPoint++;
             previousX = x;
             previousY = y;
         } else if (currentPoint == scalePoint) {
-            cacheCanvas.drawPath(path, paint);
+            canvasCache.drawPath(path, pathPaint);
             currentPoint = 0;
         } else {
             path.quadTo(previousX, previousY, x, y);
@@ -292,15 +262,9 @@ public class DrawSurfaceView extends SurfaceView {
             previousX = x;
             previousY = y;
         }
-
         // 绘制
-        tempCanvas.drawPath(path, paint);
-
-//        if (currentPoint == 0) {
-//            clear(tempCanvas);
-//        }
-
-        canvas.drawBitmap(bitmapCache, 0, 0, paint);
+        canvasCache.drawPath(path, pathPaint);
+        canvas.drawBitmap(bitmapCache, 0, 0, pathPaint);
     }
 
     @Override

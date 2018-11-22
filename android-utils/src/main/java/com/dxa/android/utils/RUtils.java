@@ -17,6 +17,8 @@ package com.dxa.android.utils;
 
 import android.content.Context;
 
+import java.lang.reflect.Field;
+
 /**
  * R资源反射工具类
  *
@@ -24,7 +26,7 @@ import android.content.Context;
  */
 public final class RUtils {
 
-    public static final String POINT = "";
+    public static final String POINT = ".";
     public static final String R = "R";
     public static final String JOIN = "$";
     public static final String ANIM = "anim";
@@ -89,10 +91,8 @@ public final class RUtils {
      */
     public static int getColor(Context context, String name) {
         try {
-            return (Integer) Class
-                    .forName(
-                            context.getPackageName() + POINT + R + JOIN + COLOR)
-                    .getDeclaredField(name).get(null);
+            Field field = Class.forName(context.getPackageName() + POINT + R + JOIN + COLOR).getDeclaredField(name);
+            return (Integer) field.get(null);
         } catch (Exception e) {
             e.printStackTrace();
             return -1;

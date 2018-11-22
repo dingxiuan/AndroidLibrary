@@ -8,6 +8,7 @@ import com.dxa.android.ui.ActivityPresenter;
 import com.dxa.androidview.R;
 import com.dxa.android.ui.SuperActivity;
 import com.github.lzyzsd.jsbridge.BridgeWebView;
+import com.github.lzyzsd.jsbridge.ui.BasicWebViewActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,6 +43,8 @@ public class MainActivity extends SuperActivity {
             R.id.btn_ecg_draw,
             R.id.btn_surface_view,
             R.id.btn_draw_surface_view,
+            R.id.btn_texture_view,
+            R.id.btn_ecg_draw_texture_view,
             R.id.btn_test_webview,
     })
     public void onClick(View view) {
@@ -58,9 +61,15 @@ public class MainActivity extends SuperActivity {
             case R.id.btn_draw_surface_view:
                 startAct(DrawSurfaceViewActivity.class);
                 break;
+            case R.id.btn_texture_view:
+                startAct(EcgTextureViewActivity.class);
+                break;
+            case R.id.btn_ecg_draw_texture_view:
+                startAct(EcgDrawTextureViewActivity.class);
+                break;
             case R.id.btn_test_webview:
-                Bundle bundle = WebViewActivity.createBundle("测试WebView", "http://www.baidu.com");
-                startAct(WebViewActivity.class, bundle);
+                Bundle bundle = BasicWebViewActivity.createBundle("测试WebView", "http://www.baidu.com");
+                startAct(BasicWebViewActivity.class, bundle);
                 break;
             default:
                 break;

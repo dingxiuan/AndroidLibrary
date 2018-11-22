@@ -29,7 +29,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="SurfaceView绘制心电图" />
+    <Button
+        android:id="@+id/btn_texture_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextureView绘制心电图" />
 
+    <Button
+        android:id="@+id/btn_ecg_draw_texture_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="EcgDrawTextureView" />
     <Button
         android:id="@+id/btn_test_webview"
         android:layout_width="match_parent"

@@ -1,23 +1,25 @@
 package com.github.lzyzsd.jsbridge.ui;
 
 import android.app.Activity;
-import android.content.Context;
+import android.graphics.Color;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.TypedValue;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebViewClient;
 
-import com.dxa.android.network.NetTools;
+import com.dxa.android.utils.RUtils;
 import com.github.lzyzsd.jsbridge.BridgeHandler;
 import com.github.lzyzsd.jsbridge.BridgeWebView;
+import com.github.lzyzsd.jsbridge.CallBackFunction;
 import com.github.lzyzsd.jsbridge.DefaultHandler;
 import com.github.lzyzsd.library.R;
 
-public class WebViewTemplate {
+public class WebViewTemplate implements BridgeHandler{
 
     private Toolbar toolbar;
     private BridgeWebView bridgeWebView;
@@ -25,13 +27,10 @@ public class WebViewTemplate {
 
     private String originalUrl;
 
-    private Context context;
-
-    public WebViewTemplate(Context context) {
-        this.context = context;
+    public WebViewTemplate() {
     }
 
-    public void onInitialView(Object o) {
+    public void initializeView(Object o) {
         if (o instanceof View) {
             View view = (View) o;
             toolbar = view.findViewById(R.id.toolbar);
@@ -43,11 +42,9 @@ public class WebViewTemplate {
             bridgeWebView = activity.findViewById(R.id.bwv_container);
             swipeRefreshLayout = activity.findViewById(R.id.swipe_refresh_layout);
         } else {
-            throw new IllegalArgumentException("不支持参数!");
+            throw new IllegalArgumentException("不支持的参数!");
         }
 
-        // 初始化Toolbar
-        initialToolbar(toolbar, null);
         // 初始化SwipeRefreshLayout
         initialSwipeRefreshLayout(swipeRefreshLayout);
         // 初始化WebView
@@ -55,27 +52,20 @@ public class WebViewTemplate {
     }
 
     /**
-     * 初始化Toolbar
+     * 初始化Activity的Toolbar
      */
-    public void initialToolbar(Toolbar toolbar, String title) {
-        toolbar.setVisibility(View.GONE);
-        if (!TextUtils.isEmpty(title)) {
-            toolbar.setTitle(title);
-        }
-    }
-
-    /**
-     * 初始化Toolbar
-     */
-    public void initialToolbar(AppCompatActivity activity, String title) {
+    public void initializeToolbar(AppCompatActivity activity, String title) {
         Toolbar toolbar = getToolbar();
+        int colorPrimaryDark = RUtils.getColor(activity, "colorPrimaryDark");
+        toolbar.setBackgroundColor(colorPrimaryDark != -1 ? colorPrimaryDark : Color.BLACK);
+        activity.setSupportActionBar(toolbar);
         ActionBar actionBar = activity.getSupportActionBar();
         if (actionBar != null) {
-            activity.setSupportActionBar(toolbar);
             if (!TextUtils.isEmpty(title)) {
                 actionBar.setTitle(title);
             }
             actionBar.setDisplayHomeAsUpEnabled(true);
+            toolbar.setNavigationOnClickListener(v -> activity.finish());
         }
     }
 
@@ -118,21 +108,14 @@ public class WebViewTemplate {
         webView.setWebViewClient(webViewClient);
 
         // 重新加载页面
-        getWebView().registerHandler("reloadPage", (data, callBackFunction) -> {
-            if (NetTools.isConnected(context)) {
-                reloadWebView();
-            }
-        });
-
-        // 初始化加载URL
-        onInitLoadUrl(webView, getOriginalUrl());
+        getWebView().registerHandler("reloadPage", this);
     }
 
     /**
      * 创建WebViewClient
      */
     public WebViewClient createWebViewClient(BridgeWebView webView) {
-        SimpleWebClient client = new SimpleWebClient(webView);
+        BasicWebClient client = new BasicWebClient(webView);
         SwipeRefreshLayout refreshLayout = getSwipeRefreshLayout();
         client.setListener(new SimpleWebClientListener(refreshLayout));
         return client;
@@ -155,14 +138,6 @@ public class WebViewTemplate {
         if (refreshLayout != null && refreshLayout.isEnabled()) {
             refreshLayout.setRefreshing(refreshing);
         }
-    }
-
-    /**
-     * 初始化加载URL
-     */
-    public void onInitLoadUrl(BridgeWebView webView, String originalUrl) {
-        // 加载WebView
-        webView.loadUrl(originalUrl);
     }
 
     /**
@@ -196,6 +171,11 @@ public class WebViewTemplate {
      */
     public String getOriginalUrl() {
         return originalUrl;
+    }
+
+    @Override
+    public void handler(String data, CallBackFunction function) {
+
     }
 
 }

@@ -2,12 +2,11 @@ package com.dxa.androidview.ui;
 
 import android.content.res.Configuration;
 import android.graphics.Canvas;
+import android.graphics.SurfaceTexture;
 import android.os.Bundle;
-import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.view.SurfaceHolder;
+import android.view.TextureView;
 
 import com.dxa.android.timer.Timer;
 import com.dxa.android.timer.TimerTask;
@@ -15,6 +14,7 @@ import com.dxa.android.ui.ActivityPresenter;
 import com.dxa.android.ui.SuperActivity;
 import com.dxa.androidview.R;
 import com.dxa.androidview.widget.DrawSurfaceView;
+import com.dxa.androidview.widget.EcgTextureView;
 import com.dxa.common.CloseQuietly;
 
 import org.apache.commons.io.IOUtils;
@@ -29,31 +29,30 @@ import java.util.concurrent.atomic.AtomicInteger;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class DrawSurfaceViewActivity extends SuperActivity
-        implements SurfaceHolder.Callback {
+public class EcgTextureViewActivity extends SuperActivity implements TextureView.SurfaceTextureListener {
 
-    @BindView(R.id.surface_view)
-    DrawSurfaceView surfaceView;
-
-    private SurfaceHolder surfaceHolder;
+    @BindView(R.id.texture_view)
+    EcgTextureView textureView;
 
     private final Timer drawTimer = new Timer(true);
     private final AtomicBoolean execState = new AtomicBoolean(true);
     private final AtomicInteger count = new AtomicInteger();
+    private final Object lock = new Object();
+
     private List<String> pointLines = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_draw_surface_view);
+        setContentView(R.layout.activity_ecg_texture_view);
         ButterKnife.bind(this);
 
         if (isLandscape()) {
             logger.i("横屏");
-            surfaceHolder = surfaceView.getHolder();
-            surfaceHolder.addCallback(this);
-            surfaceView.updateDensity();
-            surfaceView.setValue(1024, 4000, -4000);
+            textureView.setSurfaceTextureListener(this);
+            textureView.updateDensity();
+            textureView.setValue(1024, 4000, -4000);
 //            waveView.setValue(2048, 8000, -8000);;
 //            waveView.setValue(2048, 8000, -8000);
             drawTimer.schedule(new TimerTask() {
@@ -93,7 +92,6 @@ public class DrawSurfaceViewActivity extends SuperActivity
     protected void onDestroy() {
         drawTimer.cancel();
         super.onDestroy();
-        surfaceView.getHolder().removeCallback(this);
     }
 
     public boolean isLandscape() {
@@ -107,16 +105,18 @@ public class DrawSurfaceViewActivity extends SuperActivity
         return null;
     }
 
+    /**
+     * Invoked when a {@link TextureView}'s SurfaceTexture is ready for use.
+     *
+     * @param surface The surface returned by
+     *                {@link TextureView#getSurfaceTexture()}
+     * @param width   The width of the surface
+     * @param height  The height of the surface
+     */
     @Override
-    public void surfaceCreated(SurfaceHolder holder) {
-        logger.i("surfaceCreated");
-        holder.setKeepScreenOn(true);
-        final Canvas canvas = holder.lockCanvas();
-        try {
-            surfaceView.clear(canvas);
-        } finally {
-            holder.unlockCanvasAndPost(canvas);
-        }
+    public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+        logger.i("onSurfaceTextureAvailable: width[", width, "]  height[", height, "]");
+
         drawTimer.schedule(new TimerTask("DrawTask") {
             @Override
             public void run() {
@@ -137,13 +137,12 @@ public class DrawSurfaceViewActivity extends SuperActivity
                             if (split.length != 3) {
                                 return;
                             }
-                            final SurfaceHolder holder = surfaceHolder;
-                            final Canvas canvas = holder.lockCanvas();
+                            final Canvas canvas = textureView.lockCanvas();
                             if (canvas != null) {
                                 try {
-                                    surfaceView.updatePoint(canvas, Integer.parseInt(split[2]) / 3);
+                                    textureView.updatePoint(canvas, Integer.parseInt(split[2]) / 2);
                                 } finally {
-                                    holder.unlockCanvasAndPost(canvas);
+                                    textureView.unlockCanvasAndPost(canvas);
                                 }
                             }
                         } catch (Exception e) {
@@ -155,19 +154,46 @@ public class DrawSurfaceViewActivity extends SuperActivity
         }, 1500, 5);
     }
 
+    /**
+     * Invoked when the {@link SurfaceTexture}'s buffers size changed.
+     *
+     * @param surface The surface returned by
+     *                {@link TextureView#getSurfaceTexture()}
+     * @param width   The new width of the surface
+     * @param height  The new height of the surface
+     */
     @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        logger.i("surfaceChanged");
+    public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
+        logger.i("onSurfaceTextureSizeChanged: width[", width, "]  height[", height, "]");
     }
 
+    /**
+     * Invoked when the specified {@link SurfaceTexture} is about to be destroyed.
+     * If returns true, no rendering should happen inside the surface texture after this method
+     * is invoked. If returns false, the client needs to call {@link SurfaceTexture#release()}.
+     * Most applications should return true.
+     *
+     * @param surface The surface about to be destroyed
+     */
     @Override
-    public void surfaceDestroyed(SurfaceHolder holder) {
-        logger.i("surfaceDestroyed");
+    public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+        logger.i("onSurfaceTextureDestroyed");
         synchronized (lock) {
             drawTimer.cancel("DrawTask");
         }
+        return false;
     }
 
-    private final Object lock = new Object();
+    /**
+     * Invoked when the specified {@link SurfaceTexture} is updated through
+     * {@link SurfaceTexture#updateTexImage()}.
+     *
+     * @param surface The surface just updated
+     */
+    @Override
+    public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+        logger.i("onSurfaceTextureUpdated");
+    }
+
 
 }

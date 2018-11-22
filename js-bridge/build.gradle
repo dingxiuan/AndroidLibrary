@@ -42,6 +42,7 @@ dependencies {
 //    api fileTree(dir: 'libs-x5', include: ['*.jar'])
 
     implementation project(":android-library")
+    implementation project(":android-utils")
 
 }
 

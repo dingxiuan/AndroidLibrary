@@ -38,9 +38,17 @@
             android:name=".ui.DrawSurfaceViewActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".ui.WebViewActivity"
+            android:name=".ui.EcgTextureViewActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".ui.EcgDrawTextureViewActivity"
             android:screenOrientation="landscape"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity
+            android:name="com.github.lzyzsd.jsbridge.ui.BasicWebViewActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+
     </application>
 
 </manifest>

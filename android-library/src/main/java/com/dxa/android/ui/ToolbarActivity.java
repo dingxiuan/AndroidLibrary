@@ -1,5 +1,6 @@
 package com.dxa.android.ui;
 
+import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.LayoutRes;
 import android.support.v7.app.ActionBar;
@@ -8,12 +9,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.dxa.android.R;
+
 /**
  * ToolbarActivity
  */
 
-public abstract class ToolbarActivity<P extends ActivityPresenter<IView>>
-        extends SuperActivity<P> {
+public abstract class ToolbarActivity<P extends ActivityPresenter<IView>> extends SuperActivity<P> {
 
     @Override
     public void setContentView(@LayoutRes int layoutResID) {
@@ -47,10 +49,10 @@ public abstract class ToolbarActivity<P extends ActivityPresenter<IView>>
             containerParent = linearLayout;
         }
 
+        toolbar.setBackgroundColor(Color.parseColor("#303F9F"));
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setDefaultDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
         super.setContentView(containerParent);

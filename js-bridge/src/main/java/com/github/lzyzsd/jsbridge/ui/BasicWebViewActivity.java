@@ -6,13 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
-import android.view.View;
 
 import com.dxa.android.ui.ActivityPresenter;
 import com.dxa.android.ui.SuperActivity;
+import com.github.lzyzsd.jsbridge.BridgeWebView;
 import com.github.lzyzsd.library.R;
 
 
@@ -21,7 +18,7 @@ import com.github.lzyzsd.library.R;
  *
  * @param <P>
  */
-public abstract class BaseWebViewActivity<P extends ActivityPresenter> extends SuperActivity<P> {
+public class BasicWebViewActivity<P extends ActivityPresenter> extends SuperActivity<P> {
     public static Bundle createBundle(String title, String url) {
         Bundle bundle = new Bundle();
         bundle.putString(PARAMS_TITLE, title);
@@ -50,10 +47,6 @@ public abstract class BaseWebViewActivity<P extends ActivityPresenter> extends S
 
     private WebViewTemplate template;
 
-    public BaseWebViewActivity() {
-        // ~
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,8 +59,11 @@ public abstract class BaseWebViewActivity<P extends ActivityPresenter> extends S
 
         // 初始化View
         WebViewTemplate template = getTemplate();
-        template.onInitialView(this);
-        onInitialToolbar(template.getToolbar(), title);
+        template.setOriginalUrl(url);
+        template.initializeView(this);
+        template.getSwipeRefreshLayout().setEnabled(true);
+        template.initializeToolbar(this, title);
+        this.onLoadPage(template.getWebView());
     }
 
     @Override
@@ -93,25 +89,17 @@ public abstract class BaseWebViewActivity<P extends ActivityPresenter> extends S
         return null;
     }
 
-    protected void onInitialToolbar(Toolbar toolbar, String title) {
-        toolbar.setVisibility(View.VISIBLE);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            if (!TextUtils.isEmpty(title)) {
-                actionBar.setTitle(title);
-            }
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            toolbar.setNavigationOnClickListener(v -> onBackClick());
-        }
+    /**
+     * 记载URL
+     */
+    protected void onLoadPage(BridgeWebView webView) {
+        // 加载WebView
+        webView.loadUrl(url);
     }
 
     public WebViewTemplate getTemplate() {
         if (template == null) {
-            synchronized (this) {
-                this.template = createWebViewTemplate();
-                this.template.setOriginalUrl(url);
-            }
+            this.template = createTemplate();
         }
         return template;
     }
@@ -119,8 +107,8 @@ public abstract class BaseWebViewActivity<P extends ActivityPresenter> extends S
     /**
      * 创建WebView的模板
      */
-    protected WebViewTemplate createWebViewTemplate() {
-        return new WebViewTemplate(getContext());
+    protected WebViewTemplate createTemplate() {
+        return new WebViewTemplate();
     }
 
     public Bundle getExtras() {
