@@ -1,0 +1,13 @@
+apply plugin: 'com.android.application'
+
+// 引入公共依赖
+apply from: "${rootProject.getProjectDir()}/buildSystem/AndroidConfig.gradle"
+
+android {
+
+    defaultConfig {
+        applicationId "dev.frankie.ecgwave"
+        versionCode 1
+        versionName "1.0"
+    }
+}
