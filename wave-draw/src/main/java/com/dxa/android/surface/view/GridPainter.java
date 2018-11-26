@@ -31,7 +31,7 @@ public class GridPainter {
     /**
      * 网格的数量: 宽度
      */
-    private int gridCount = 20;
+    private int gridCount = 25;
 
     private int thinColor = COLOR_THIN;
     private int thickColor = COLOR_THICK;
@@ -46,7 +46,7 @@ public class GridPainter {
 
     // 小网格的宽度
     private int gridSize;
-    // 背景色，默认白色
+    // 背景色，默认黑色
 //    private int backgroundColor = Color.WHITE;
     private int backgroundColor = Color.BLACK;
     // 线的宽度和高度
@@ -71,9 +71,7 @@ public class GridPainter {
      * @param height 视图的高度
      */
     public void onSizeChanged(int width, int height) {
-        int maxCount = width;
-//            int maxCount = width > height ? width : height;
-        gridSize = (maxCount / gridCount) / sgCount;
+        gridSize = (int) ((width / (gridCount * 1.0f)) / sgCount);
         // 网格数
         horizontalCount = (height / (gridSize * sgCount)) * sgCount;
         verticalCount = (width / (gridSize * sgCount)) * sgCount;
@@ -85,13 +83,13 @@ public class GridPainter {
         paddingWidth = (width - lineWidth) / 2;
         paddingHeight = (height - lineHeight) / 2;
 
-        // 计算缩放比
+        // 计算缩放比: 最大值 / height
     }
 
     /**
      * 绘制网格
      */
-    public void drawGrid(Canvas canvas, int verticalCount, int horizontalCount, int gridSize, int sgCount,
+    public void drawGrid(Canvas canvas, int verticalCount, int horizontalCount, int gridSize,
                          int paddingWidth, int paddingHeight, int lineWidth, int lineHeight) {
         // 绘制小网格
         int startX, startY;
@@ -118,15 +116,6 @@ public class GridPainter {
         }
     }
 
-    private void setPaint(int i) {
-        if (i % sgCount == 0) {
-            gridPaint.setColor(thickColor);
-            gridPaint.setStrokeWidth(thickWidth);
-        } else if (i % sgCount == 1) {
-            gridPaint.setColor(thinColor);
-            gridPaint.setStrokeWidth(thinWidth);
-        }
-    }
 
     /**
      * 绘制背景
@@ -135,7 +124,7 @@ public class GridPainter {
         // 背景
         canvas.drawColor(backgroundColor);
         // 绘制网格竖线
-        drawGrid(canvas, verticalCount, horizontalCount, gridSize, sgCount, paddingWidth, paddingHeight, lineWidth, lineHeight);
+        drawGrid(canvas, verticalCount, horizontalCount, gridSize, paddingWidth, paddingHeight, lineWidth, lineHeight);
 //            // x轴
 //            canvas.drawLine(paddingWidth, (lineHeight + paddingHeight) / 2,
 //                    lineWidth + paddingWidth, (lineHeight + paddingHeight) / 2, xAxisPaint);
@@ -143,6 +132,37 @@ public class GridPainter {
         logger.e("绘制背景网格");
     }
 
+    public int getGridCount() {
+        return gridCount;
+    }
+
+    public int getHorizontalCount() {
+        return horizontalCount;
+    }
+
+    public int getVerticalCount() {
+        return verticalCount;
+    }
+
+    public int getGridSize() {
+        return gridSize;
+    }
+
+    public int getLineWidth() {
+        return lineWidth;
+    }
+
+    public int getLineHeight() {
+        return lineHeight;
+    }
+
+    public int getPaddingWidth() {
+        return paddingWidth;
+    }
+
+    public int getPaddingHeight() {
+        return paddingHeight;
+    }
 
     /**
      * 创建普通的画笔

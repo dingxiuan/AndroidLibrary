@@ -22,9 +22,9 @@ public class EcgSurfaceView2 extends SurfaceView implements SurfaceHolder.Callba
      */
     private Thread drawThread;
 
-    private final Painter painter;
     private int waveSpeed = 25;// 波速: 25mm/s
     private int sleepTime = 8; // 每次锁屏的时间间距，单位:ms
+    private final Painter painter;
 
     private final GridPainter gridPainter;
 
