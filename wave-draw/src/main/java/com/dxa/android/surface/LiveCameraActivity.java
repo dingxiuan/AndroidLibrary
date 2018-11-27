@@ -1,4 +1,4 @@
-package dev.frankie.ecgwave;
+package com.dxa.android.surface;
 
 import android.Manifest;
 import android.graphics.SurfaceTexture;

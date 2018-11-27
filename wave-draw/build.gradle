@@ -6,7 +6,7 @@ apply from: "${rootProject.getProjectDir()}/buildSystem/AndroidConfig.gradle"
 android {
 
     defaultConfig {
-        applicationId "dev.frankie.ecgwave"
+        applicationId "com.dxa.android.surface"
         versionCode 1
         versionName "1.0"
     }

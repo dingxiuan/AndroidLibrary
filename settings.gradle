@@ -3,6 +3,7 @@ include ':android-library', ':wave-draw'
 include ':android-utils'
 
 include ':js-bridge'
+//include ':zxing-android'
 
 include ':ecg-draw'
 

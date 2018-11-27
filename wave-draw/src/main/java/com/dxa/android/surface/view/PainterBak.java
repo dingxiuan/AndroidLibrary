@@ -1,4 +1,4 @@
-package dev.frankie.view;
+package com.dxa.android.surface.view;
 
 import android.graphics.Canvas;
 import android.graphics.Color;

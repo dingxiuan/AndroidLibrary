@@ -6,12 +6,12 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <dev.frankie.view.EcgSurfaceView2
+    <com.dxa.android.surface.view.EcgSurfaceView2
         android:id="@+id/ecg_texture_view"
         android:layout_width="match_parent"
         android:layout_height="200dp" />
 
-    <dev.frankie.view.EcgView
+    <com.dxa.android.surface.view.EcgView
         android:id="@+id/ecg_view"
         android:layout_width="match_parent"
         android:layout_height="200dp" />
