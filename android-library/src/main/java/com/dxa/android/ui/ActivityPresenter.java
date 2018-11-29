@@ -73,8 +73,8 @@ public class ActivityPresenter<V extends IView> implements IPresenter<V> {
     }
 
     @Override
-    public Handler getDefaultHandler() {
-        return getView().getDefaultHandler();
+    public Handler getSyncHandler() {
+        return getView().getSyncHandler();
     }
 
     @Override

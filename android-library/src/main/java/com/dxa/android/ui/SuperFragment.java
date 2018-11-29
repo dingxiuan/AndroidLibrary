@@ -187,49 +187,57 @@ public abstract class SuperFragment<P extends IFragmentPresenter> extends Fragme
     @Override
     public void finishActivity() {
         log("finishActivity()");
-        if (getActivity() != null) {
-            getActivity().finish();
-        }
+        requireActivity().finish();
     }
 
     @Override
     public void startAct(Class<? extends Activity> clazz) {
-        FragmentActivity activity = getActivity();
-        Intent intent = new Intent(activity, clazz);
-        startActivity(intent);
+        startAct(clazz, null);
     }
 
     @Override
     public void startAct(Class<? extends Activity> clazz, Bundle bundle) {
-        FragmentActivity activity = getActivity();
-        Intent intent = new Intent(activity, clazz);
-        intent.putExtras(bundle);
-        startActivity(intent);
+        startAct(clazz, null, bundle, false);
     }
 
     @Override
     public void startActAfterFinish(Class<? extends Activity> clazz) {
         startAct(clazz);
-        getActivity().finish();
+        requireActivity().finish();
     }
 
     @Override
-    public void startActAfterFinish(Class<? extends Activity> clazz,
-                                    Bundle bundle) {
+    public void startActAfterFinish(Class<? extends Activity> clazz, Bundle bundle) {
         startAct(clazz, bundle);
-        getActivity().finish();
+        requireActivity().finish();
     }
 
     @Override
-    public void startActForResult(Class<? extends Activity> clazz,
-                                  int requestCode) {
+    public void startAct(Class<? extends Activity> clazz, Intent intent, Bundle bundle, boolean isFinish) {
+        if (intent == null) {
+            intent = new Intent();
+        }
+        intent.setClass(requireActivity(), clazz);
+        intent.putExtras(bundle);
+        super.startActivity(intent);
+    }
+
+    @Override
+    public void startActForResult(Class<? extends Activity> clazz, int requestCode) {
         startActForResult(clazz, requestCode, null);
     }
 
     @Override
-    public void startActForResult(Class<? extends Activity> clazz,
-                                  int requestCode, Bundle bundle) {
-        Intent intent = new Intent(getActivity(), clazz);
+    public void startActForResult(Class<? extends Activity> clazz, int requestCode, Bundle bundle) {
+        startActForResult(clazz, null, requestCode, bundle);
+    }
+
+    @Override
+    public void startActForResult(Class<? extends Activity> clazz, Intent intent, int requestCode, Bundle bundle) {
+        if (intent == null) {
+            intent = new Intent();
+        }
+        intent.setClass(requireActivity(), clazz);
         if (bundle != null) {
             intent.putExtras(bundle);
         }
@@ -257,13 +265,8 @@ public abstract class SuperFragment<P extends IFragmentPresenter> extends Fragme
     }
 
     @Override
-    public Handler getDefaultHandler() {
-        return getSyncHandler();
-    }
-
-    @Override
     public void onBackClick() {
-        getActivity().finish();
+        requireActivity().finish();
     }
 
     /**

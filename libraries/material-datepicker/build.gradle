@@ -1,0 +1,18 @@
+apply plugin: 'com.android.library'
+
+apply from: "${rootDir}/buildSystem/AndroidConfig.gradle"
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'com.pholser:junit-quickcheck-core:0.7'
+    testImplementation 'com.pholser:junit-quickcheck-generators:0.7'
+
+    androidTestImplementation 'androidx.annotation:annotation:1.0.0'
+    androidTestImplementation 'androidx.test:runner:1.1.1-alpha01'
+    androidTestImplementation 'androidx.test:rules:1.1.1-alpha01'
+
+}
+
+

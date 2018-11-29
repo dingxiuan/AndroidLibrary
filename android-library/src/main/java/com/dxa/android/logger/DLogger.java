@@ -13,6 +13,10 @@ public class DLogger {
         return new DLogger(clazz);
     }
 
+    public static DLogger getLogger(Class<?> clazz, LogLevel level) {
+        return new DLogger(clazz, level);
+    }
+
     /**
      * 默认的日志对象
      */
@@ -27,7 +31,7 @@ public class DLogger {
      */
     private static boolean DEBUG = false;
 
-    public static String TAG = "DLogger";
+    private static String TAG = "DLogger";
 
     /**
      * 设置是否打印日志
@@ -67,11 +71,11 @@ public class DLogger {
     private LogLevel level;
 
     public DLogger() {
-        this(TAG, LogLevel.DEBUG);
+        this(TAG, LEVEL);
     }
 
     public DLogger(String tag) {
-        this(tag, LogLevel.DEBUG);
+        this(tag, LEVEL);
     }
 
     public DLogger(String tag, LogLevel level) {
@@ -80,7 +84,7 @@ public class DLogger {
     }
 
     public DLogger(Class<?> clazz) {
-        this(clazz, LogLevel.DEBUG);
+        this(clazz, LEVEL);
     }
 
     public DLogger(Class<?> clazz, LogLevel level) {
@@ -154,25 +158,27 @@ public class DLogger {
         }
     }
 
-    public void t(LogLevel level, Object... os) {
-        t(tag, level, os);
-    }
-
-    public void t(String tag, LogLevel level, Object... os) {
-        if (isPrintLog()) {
-            String s;
-            synchronized (buffer) {
-                buffer.setLength(0);
-                for (Object o : os) {
-                    buffer.append(o);
-                }
-                s = buffer.append("\nThread: ").append(currentThreadName())
-                        .append("\nTime: ").append(sdf.format(System.currentTimeMillis()))
-                        .toString();
-            }
-            print(level, tag, s);
-        }
-    }
+//    @Deprecated
+//    public void t(LogLevel level, Object... os) {
+//        t(tag, level, os);
+//    }
+//
+//    @Deprecated
+//    public void t(String tag, LogLevel level, Object... os) {
+//        if (isPrintLog()) {
+//            String s;
+//            synchronized (buffer) {
+//                buffer.setLength(0);
+//                for (Object o : os) {
+//                    buffer.append(o);
+//                }
+//                buffer.append("thread[").append(getThreadName()).append("], time[")
+//                        .append(sdf.format(System.currentTimeMillis())).append("]");
+//                s = buffer.toString();
+//            }
+//            print(level, tag, s);
+//        }
+//    }
 
     public void log(LogLevel level, Object... os) {
         log(level, tag, os);
@@ -183,12 +189,11 @@ public class DLogger {
             String s;
             synchronized (buffer) {
                 buffer.setLength(0);
+                buffer.append("thread[").append(getThreadName()).append("]: ");
                 for (Object o : os) {
                     buffer.append(o);
                 }
-                s = buffer.append("......")
-                        .append(sdf.format(System.currentTimeMillis()))
-                        .toString();
+                s = buffer.toString();
             }
             print(level, tag, s);
         }
@@ -223,7 +228,7 @@ public class DLogger {
         return msg != null && msg.trim().length() > 0;
     }
 
-    private static String currentThreadName() {
+    private static String getThreadName() {
         return Thread.currentThread().getName();
     }
 

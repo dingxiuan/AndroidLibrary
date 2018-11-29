@@ -1,0 +1,18 @@
+apply plugin: 'com.android.application'
+
+// 引入公共依赖
+apply from: "${rootProject.getProjectDir()}/buildSystem/AndroidConfig.gradle"
+
+android {
+
+    defaultConfig {
+        applicationId "com.dxa.android.surface"
+        versionCode 1
+        versionName "1.0"
+    }
+}
+
+
+dependencies {
+    implementation project (":android-library")
+}

@@ -44,7 +44,7 @@ public interface IPresenter<V extends IView> {
     /**
      * 获取默认的Handler
      */
-    Handler getDefaultHandler();
+    Handler getSyncHandler();
 
     /**
      * 获取上下文对象

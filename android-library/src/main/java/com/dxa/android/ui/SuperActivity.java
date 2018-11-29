@@ -23,8 +23,7 @@ import com.dxa.android.ui.handler.SyncHandler;
  * Activity的基类
  */
 @SuppressLint("NewApi")
-public abstract class SuperActivity<P extends ActivityPresenter>
-        extends AppCompatActivity implements IView {
+public abstract class SuperActivity<P extends ActivityPresenter> extends AppCompatActivity implements IView {
 
     private final ActivityLifecycle LIFECYCLE = new DefaultActivityLifecycle();
 
@@ -120,7 +119,7 @@ public abstract class SuperActivity<P extends ActivityPresenter>
     /**
      * 获取当前Activity的对象
      */
-    public final Activity getThisActivity() {
+    public final Activity getActivity() {
         return this;
     }
 
@@ -137,11 +136,6 @@ public abstract class SuperActivity<P extends ActivityPresenter>
     @Override
     public AsyncHandler getAsyncHandler() {
         return AsyncHandler.getInstance();
-    }
-
-    @Override
-    public Handler getDefaultHandler() {
-        return getSyncHandler();
     }
 
     @SuppressLint("NewApi")
@@ -163,45 +157,25 @@ public abstract class SuperActivity<P extends ActivityPresenter>
         finish();
     }
 
-    /**
-     * 启动Activity
-     *
-     * @param clazz    Activity类
-     * @param bundle   携带的Bundle
-     * @param isFinish 是否启动后销毁Activity
-     */
-    protected void startAct(Class<? extends Activity> clazz,
-                            Bundle bundle,
-                            boolean isFinish) {
-        Intent intent = new Intent(this, clazz);
-        if (bundle != null) {
-            intent.putExtras(bundle);
-        }
-        startActivity(intent);
-        logger.d("启动Activity: ", clazz.getName());
-        if (isFinish) {
-            super.finish();
-        }
-    }
-
     @Override
     public void startAct(Class<? extends Activity> clazz) {
-        startAct(clazz, null, false);
+        startAct(clazz, null, null, false);
     }
 
     @Override
     public void startAct(Class<? extends Activity> clazz, Bundle bundle) {
-        startAct(clazz, bundle, false);
+        startAct(clazz, null, bundle, false);
     }
+
 
     @Override
     public void startActAfterFinish(Class<? extends Activity> clazz) {
-        startAct(clazz, null, true);
+        startAct(clazz, null, null, true);
     }
 
     @Override
     public void startActAfterFinish(Class<? extends Activity> clazz, Bundle bundle) {
-        startAct(clazz, bundle, false);
+        startAct(clazz, null, bundle, true);
     }
 
     /**
@@ -214,17 +188,61 @@ public abstract class SuperActivity<P extends ActivityPresenter>
 
     /**
      * 启动Activity
+     *
+     * @param clazz    Activity类
+     * @param intent   intent
+     * @param bundle   携带的Bundle
+     * @param isFinish 是否启动后销毁Activity
+     */
+    @Override
+    public void startAct(Class<? extends Activity> clazz,
+                         @Nullable Intent intent, @Nullable Bundle bundle, boolean isFinish) {
+        if (clazz == null) {
+            throw new IllegalArgumentException("Activity's class object is null.");
+        }
+
+        if (intent == null) {
+            intent = new Intent();
+        }
+        intent.setClass(this, clazz);
+        if (bundle != null) {
+            intent.putExtras(bundle);
+        }
+        startActivity(intent);
+        logger.d("启动Activity: ", clazz.getName());
+        if (isFinish) {
+            super.finish();
+        }
+    }
+
+    /**
+     * 启动Activity
      */
     @Override
     public void startActForResult(Class<? extends Activity> clazz,
                                   int requestCode, @Nullable Bundle bundle) {
-        if (clazz == null)
-            throw new IllegalArgumentException("Activity's class object is null.");
+        startActForResult(clazz, null, requestCode, bundle);
+    }
 
-        Intent intent = new Intent(this, clazz);
+    /**
+     * 启动Activity
+     */
+    @Override
+    public void startActForResult(Class<? extends Activity> clazz,
+                                  @Nullable Intent intent, int requestCode, @Nullable Bundle bundle) {
+        if (clazz == null) {
+            throw new IllegalArgumentException("Activity's class object is null.");
+        }
+
+        if (intent == null) {
+            intent = new Intent();
+        }
+
+        intent.setClass(this, clazz);
         if (bundle != null) {
             intent.putExtras(bundle);
         }
+        logger.d("启动Activity: ", clazz.getName());
         super.startActivityForResult(intent, requestCode);
     }
 
@@ -232,7 +250,6 @@ public abstract class SuperActivity<P extends ActivityPresenter>
     public Context getContext() {
         return this;
     }
-
 
     @Override
     public void showToast(final String msg) {

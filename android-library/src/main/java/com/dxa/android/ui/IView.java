@@ -2,6 +2,7 @@ package com.dxa.android.ui;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
@@ -44,6 +45,11 @@ public interface IView extends IShowToast {
     void startActAfterFinish(Class<? extends Activity> clazz, Bundle bundle);
 
     /**
+     * 启动其他Activity
+     */
+    void startAct(Class<? extends Activity> clazz, Intent intent, Bundle bundle, boolean isFinish);
+
+    /**
      * 启动其他Activity，并返回结果
      */
     void startActForResult(Class<? extends Activity> clazz, int requestCode);
@@ -52,6 +58,11 @@ public interface IView extends IShowToast {
      * 启动其他Activity，并返回结果
      */
     void startActForResult(Class<? extends Activity> clazz, int requestCode, Bundle bundle);
+
+    /**
+     * 启动其他Activity，并返回结果
+     */
+    void startActForResult(Class<? extends Activity> clazz, Intent intent, int requestCode, Bundle bundle);
 
     /**
      * 获取当前的Activity
@@ -72,11 +83,6 @@ public interface IView extends IShowToast {
      * 获取子线程的Handler
      */
     AsyncHandler getAsyncHandler();
-
-    /**
-     * 获取默认的Handler
-     */
-    Handler getDefaultHandler();
 
     /**
      * 获取资源对象

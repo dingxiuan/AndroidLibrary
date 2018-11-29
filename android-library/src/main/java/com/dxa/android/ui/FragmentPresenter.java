@@ -126,8 +126,8 @@ public abstract class FragmentPresenter<V extends IView>
     }
 
     @Override
-    public Handler getDefaultHandler() {
-        return getView().getDefaultHandler();
+    public Handler getSyncHandler() {
+        return getView().getSyncHandler();
     }
 
     @Override

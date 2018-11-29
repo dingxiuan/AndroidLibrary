@@ -68,7 +68,7 @@ public interface IFragmentPresenter<V extends IView> extends IPresenter<V> {
     AsyncHandler getAsyncHandler();
 
     @Override
-    Handler getDefaultHandler();
+    Handler getSyncHandler();
 
     @Override
     Context getContext();
