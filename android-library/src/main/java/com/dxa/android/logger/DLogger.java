@@ -158,28 +158,6 @@ public class DLogger {
         }
     }
 
-//    @Deprecated
-//    public void t(LogLevel level, Object... os) {
-//        t(tag, level, os);
-//    }
-//
-//    @Deprecated
-//    public void t(String tag, LogLevel level, Object... os) {
-//        if (isPrintLog()) {
-//            String s;
-//            synchronized (buffer) {
-//                buffer.setLength(0);
-//                for (Object o : os) {
-//                    buffer.append(o);
-//                }
-//                buffer.append("thread[").append(getThreadName()).append("], time[")
-//                        .append(sdf.format(System.currentTimeMillis())).append("]");
-//                s = buffer.toString();
-//            }
-//            print(level, tag, s);
-//        }
-//    }
-
     public void log(LogLevel level, Object... os) {
         log(level, tag, os);
     }
@@ -189,43 +167,33 @@ public class DLogger {
             String s;
             synchronized (buffer) {
                 buffer.setLength(0);
-                buffer.append("thread[").append(getThreadName()).append("]: ");
+                buffer.append("thread[").append(getThreadName()).append("] ==>: ");
                 for (Object o : os) {
                     buffer.append(o);
                 }
                 s = buffer.toString();
             }
-            print(level, tag, s);
-        }
-    }
-
-    private void print(LogLevel level, String tag, String msg) {
-        if (isPrintLog(level) && notEmpty(msg)) {
             switch (level) {
                 case VERBOSE:
-                    Log.v(tag, msg);
+                    Log.v(tag, s);
                     break;
                 case DEBUG:
-                    Log.d(tag, msg);
+                    Log.d(tag, s);
                     break;
                 case INFO:
-                    Log.i(tag, msg);
+                    Log.i(tag, s);
                     break;
                 case WARN:
-                    Log.w(tag, msg);
+                    Log.w(tag, s);
                     break;
                 case ERROR:
-                    Log.e(tag, msg);
+                    Log.e(tag, s);
                     break;
                 case NONE:
                     // nothing done!
                     break;
             }
         }
-    }
-
-    private static boolean notEmpty(String msg) {
-        return msg != null && msg.trim().length() > 0;
     }
 
     private static String getThreadName() {
