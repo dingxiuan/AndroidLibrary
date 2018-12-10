@@ -167,7 +167,6 @@ public class DLogger {
             String s;
             synchronized (buffer) {
                 buffer.setLength(0);
-                buffer.append("thread[").append(getThreadName()).append("] ==>: ");
                 for (Object o : os) {
                     buffer.append(o);
                 }
@@ -175,19 +174,19 @@ public class DLogger {
             }
             switch (level) {
                 case VERBOSE:
-                    Log.v(tag, s);
+                    Log.v(String.format("%s-thread[%s]", tag, getThreadName()), s);
                     break;
                 case DEBUG:
-                    Log.d(tag, s);
+                    Log.d(String.format("%s-thread[%s]", tag, getThreadName()), s);
                     break;
                 case INFO:
-                    Log.i(tag, s);
+                    Log.i(String.format("%s-thread[%s]", tag, getThreadName()), s);
                     break;
                 case WARN:
-                    Log.w(tag, s);
+                    Log.w(String.format("%s-thread[%s]", tag, getThreadName()), s);
                     break;
                 case ERROR:
-                    Log.e(tag, s);
+                    Log.e(String.format("%s-thread[%s]", tag, getThreadName()), s);
                     break;
                 case NONE:
                     // nothing done!

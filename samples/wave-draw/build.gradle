@@ -14,5 +14,6 @@ android {
 
 
 dependencies {
-    implementation project (":android-library")
+    implementation project(":android-library")
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
 }

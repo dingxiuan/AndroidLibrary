@@ -6,7 +6,7 @@ android {
 }
 
 def jarName = getName()
-def version = "2.7.5"
+def version = "2.7.6"
 def jarVersion = "-v" + version
 //def sdkDestinationPath = "build"
 def sdkDestinationPath = version

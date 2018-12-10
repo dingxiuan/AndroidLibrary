@@ -1,21 +1,25 @@
 package com.github.lzyzsd.jsbridge.ui;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.dxa.android.ui.FragmentPresenter;
 import com.dxa.android.ui.SuperFragment;
-import com.dxa.android.utils.RUtils;
 import com.github.lzyzsd.library.R;
 
 
 public class BasicWebViewFragment<P extends FragmentPresenter> extends SuperFragment<P> {
+    /**
+     * 新建WebViewFragment
+     */
+    public static BasicWebViewFragment newInstance(String tagName, String originalUrl) {
+        return newInstance(new BasicWebViewFragment(), tagName, originalUrl);
+    }
+
     /**
      * 新建WebViewFragment
      */
@@ -91,8 +95,6 @@ public class BasicWebViewFragment<P extends FragmentPresenter> extends SuperFrag
 
 
     protected void onInitializeToolbar(Toolbar toolbar) {
-        int colorPrimaryDark = RUtils.getColor(getContext(), "colorPrimaryDark");
-        toolbar.setBackgroundColor(colorPrimaryDark > 0 ? colorPrimaryDark : Color.BLACK);
         toolbar.setVisibility(View.GONE);
     }
 

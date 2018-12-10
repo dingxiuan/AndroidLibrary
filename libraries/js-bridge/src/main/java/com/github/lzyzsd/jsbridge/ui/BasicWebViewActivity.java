@@ -4,6 +4,7 @@ package com.github.lzyzsd.jsbridge.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
@@ -30,6 +31,11 @@ public class BasicWebViewActivity<P extends ActivityPresenter> extends SuperActi
         Intent intent = new Intent(context, activityClass);
         intent.putExtras(bundle);
         context.startActivity(intent);
+    }
+
+    public static void startActivity(Context context, String title, String url) {
+        Bundle bundle = createBundle(title, url);
+        startActivity(context, BasicWebViewActivity.class, bundle);
     }
 
     public static void startActivity(Context context, Class<? extends Activity> activityClass, String title, String url) {
@@ -118,5 +124,10 @@ public class BasicWebViewActivity<P extends ActivityPresenter> extends SuperActi
     public Object getStringExtras(String key) {
         Bundle extras = getExtras();
         return extras != null ? extras.get(key) : null;
+    }
+
+    @Override
+    public Resources getResources() {
+        return getContext().getResources();
     }
 }

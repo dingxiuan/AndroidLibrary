@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="OverFlowMenuTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="BwvOverFlowMenuTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- 设置Menu菜单的背景色 -->
         <item name="android:itemBackground">@android:color/white</item>
         <!-- 设置Menu菜单的字体颜色 -->

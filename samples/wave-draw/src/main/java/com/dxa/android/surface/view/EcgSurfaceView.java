@@ -55,7 +55,7 @@ public class EcgSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
 
         paint = new Paint();
         paint.setColor(Color.GREEN);
-        paint.setStrokeWidth(6);
+        paint.setStrokeWidth(3);
 
         this.lockWidth = convertXOffset(getResources().getDisplayMetrics(), waveSpeed, sleepTime);
 
@@ -179,36 +179,32 @@ public class EcgSurfaceView extends SurfaceView implements SurfaceHolder.Callbac
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         runState.set(true);
-        drawThread = new Thread(new Runnable() {
+        drawThread = new Thread(() -> {
+            while (runState.get()) {
+                long startTime = System.currentTimeMillis();
 
-            @Override
-            public void run() {
-                while (runState.get()) {
-                    long startTime = System.currentTimeMillis();
+                rect.set(startX, 0, (int) (startX + lockWidth + blankLineWidth), getHeight());
+                final Canvas canvas = surfaceHolder.lockCanvas(rect);
+                if (canvas == null) return;
+                try {
+                    canvas.drawColor(bgColor);
+                    drawWave0(canvas);
+                    drawWave1(canvas);
+                } finally {
+                    surfaceHolder.unlockCanvasAndPost(canvas);
+                }
 
-                    rect.set(startX, 0, (int) (startX + lockWidth + blankLineWidth), getHeight());
-                    final Canvas canvas = surfaceHolder.lockCanvas(rect);
-                    if (canvas == null) return;
+                startX = (int) (startX + lockWidth);
+                if (startX > getWidth()) {
+                    startX = 0;
+                }
+
+                long endTime = System.currentTimeMillis();
+                if (endTime - startTime < sleepTime) {
                     try {
-                        canvas.drawColor(bgColor);
-                        drawWave0(canvas);
-                        drawWave1(canvas);
-                    } finally {
-                        surfaceHolder.unlockCanvasAndPost(canvas);
-                    }
-
-                    startX = (int) (startX + lockWidth);
-                    if (startX > getWidth()) {
-                        startX = 0;
-                    }
-
-                    long endTime = System.currentTimeMillis();
-                    if (endTime - startTime < sleepTime) {
-                        try {
-                            Thread.sleep(sleepTime - (endTime - startTime));
-                        } catch (InterruptedException e) {
-                            Log.e("EcgWave", "throw InterruptedException: " + e.getMessage(), e);
-                        }
+                        Thread.sleep(sleepTime - (endTime - startTime));
+                    } catch (InterruptedException e) {
+                        Log.e("EcgWave", "throw InterruptedException: " + e.getMessage(), e);
                     }
                 }
             }

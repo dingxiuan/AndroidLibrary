@@ -7,12 +7,10 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.TypedValue;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebViewClient;
 
-import com.dxa.android.utils.RUtils;
 import com.github.lzyzsd.jsbridge.BridgeHandler;
 import com.github.lzyzsd.jsbridge.BridgeWebView;
 import com.github.lzyzsd.jsbridge.CallBackFunction;
@@ -33,14 +31,14 @@ public class WebViewTemplate implements BridgeHandler{
     public void initializeView(Object o) {
         if (o instanceof View) {
             View view = (View) o;
-            toolbar = view.findViewById(R.id.toolbar);
+            toolbar = view.findViewById(R.id.bwv_toolbar);
             bridgeWebView = view.findViewById(R.id.bwv_container);
-            swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
+            swipeRefreshLayout = view.findViewById(R.id.bwv_swipe_refresh_layout);
         } else if (o instanceof Activity) {
             Activity activity = (Activity) o;
-            toolbar = activity.findViewById(R.id.toolbar);
+            toolbar = activity.findViewById(R.id.bwv_toolbar);
             bridgeWebView = activity.findViewById(R.id.bwv_container);
-            swipeRefreshLayout = activity.findViewById(R.id.swipe_refresh_layout);
+            swipeRefreshLayout = activity.findViewById(R.id.bwv_swipe_refresh_layout);
         } else {
             throw new IllegalArgumentException("不支持的参数!");
         }
@@ -56,8 +54,6 @@ public class WebViewTemplate implements BridgeHandler{
      */
     public void initializeToolbar(AppCompatActivity activity, String title) {
         Toolbar toolbar = getToolbar();
-        int colorPrimaryDark = RUtils.getColor(activity, "colorPrimaryDark");
-        toolbar.setBackgroundColor(colorPrimaryDark != -1 ? colorPrimaryDark : Color.BLACK);
         activity.setSupportActionBar(toolbar);
         ActionBar actionBar = activity.getSupportActionBar();
         if (actionBar != null) {

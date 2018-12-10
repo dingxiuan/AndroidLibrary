@@ -6,43 +6,19 @@ apply from: "${rootProject.getProjectDir()}/buildSystem/AndroidConfig.gradle"
 // 将代码打成jar包
 apply from: "${rootProject.getProjectDir()}/buildSystem/make-jar.gradle"
 
-//android {
-//    compileSdkVersion 28
-//    buildToolsVersion '28.0.3'
-//
-//    defaultConfig {
-//        minSdkVersion 14
-//        targetSdkVersion 28
-//        versionCode 1
-//        versionName version
-//
-//        multiDexEnabled true
-//    }
-//    buildTypes {
-//        release {
-//            minifyEnabled false
-//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-//        }
-//    }
-//    lintOptions { // 消除lint警告
-//        abortOnError false
-//        checkReleaseBuilds false
-//    }
-//
-//    //java版本
-//    compileOptions {
-//        sourceCompatibility JavaVersion.VERSION_1_8
-//        targetCompatibility JavaVersion.VERSION_1_8
-//    }
-//
-//}
+android {
+    defaultConfig {
+        versionCode 1
+        versionName "0.1.0-SNAPSHOT"
+    }
+}
 
 dependencies {
-    api fileTree(dir: 'libs', include: ['*.jar'])
+    api fileTree(dir: 'libs', include: ['*.jar', "*.aar"])
 //    api fileTree(dir: 'libs-x5', include: ['*.jar'])
 
     implementation project(":android-library")
-    implementation project(":android-utils")
+//    implementation project(":android-utils")
 
 }
 

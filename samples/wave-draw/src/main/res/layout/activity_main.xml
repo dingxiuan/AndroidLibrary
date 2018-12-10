@@ -6,7 +6,7 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <com.dxa.android.surface.view.EcgSurfaceView2
+    <com.dxa.android.surface.view.EcgSurfaceView
         android:id="@+id/ecg_texture_view"
         android:layout_width="match_parent"
         android:layout_height="200dp" />

@@ -142,7 +142,7 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
 
     // ButterKnife
-//    def butterKnifeVersion = "8.4.0"
+//    def butterKnifeVersion = "8.8.1"
 //    implementation "com.jakewharton:butterknife:${butterKnifeVersion}"
 //    implementation "com.jakewharton:butterknife-compiler:${butterKnifeVersion}"
 //    implementation "com.jakewharton:butterknife-annotations:${butterKnifeVersion}"

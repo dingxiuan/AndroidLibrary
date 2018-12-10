@@ -30,7 +30,7 @@ public abstract class SuperFragment<P extends IFragmentPresenter> extends Fragme
     /**
      * 打印日志
      */
-    protected DLogger logger = new DLogger("Fragment");
+    protected DLogger logger = DLogger.getLogger(getClass(), LogLevel.NONE);
 
     private P presenter;
 

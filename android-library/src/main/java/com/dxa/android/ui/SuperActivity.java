@@ -27,7 +27,7 @@ public abstract class SuperActivity<P extends ActivityPresenter> extends AppComp
 
     private final ActivityLifecycle LIFECYCLE = new DefaultActivityLifecycle();
 
-    protected final DLogger logger = new DLogger("Activity");
+    protected final DLogger logger = DLogger.getLogger(getClass(), LogLevel.NONE);
     private final Object lock = new Object();
 
     /**
@@ -40,8 +40,6 @@ public abstract class SuperActivity<P extends ActivityPresenter> extends AppComp
     private ActivityLifecycle lifecycle = LIFECYCLE;
 
     public SuperActivity() {
-        String tag = getClass().getSimpleName();
-        logger.setTag(tag);
     }
 
     @Override
