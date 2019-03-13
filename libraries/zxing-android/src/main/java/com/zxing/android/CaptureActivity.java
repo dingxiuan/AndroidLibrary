@@ -125,7 +125,6 @@ public class CaptureActivity extends AppCompatActivity implements SurfaceHolder.
         viewfinderView = findViewById(R.id.viewfinder_view);
         viewfinderView.setZxingConfig(config);
 
-
         backIv = findViewById(R.id.backIv);
         backIv.setOnClickListener(this);
 
@@ -138,11 +137,9 @@ public class CaptureActivity extends AppCompatActivity implements SurfaceHolder.
         albumLayout.setOnClickListener(this);
         bottomLayout = findViewById(R.id.bottomLayout);
 
-
         switchVisibility(bottomLayout, config.isShowbottomLayout());
         switchVisibility(flashLightLayout, config.isShowFlashLight());
         switchVisibility(albumLayout, config.isShowAlbum());
-
 
         /*有闪光灯就显示手电筒按钮  否则不显示*/
         if (isSupportCameraLedFlash(getPackageManager())) {
@@ -150,7 +147,6 @@ public class CaptureActivity extends AppCompatActivity implements SurfaceHolder.
         } else {
             flashLightLayout.setVisibility(View.GONE);
         }
-
     }
 
 
@@ -176,7 +172,6 @@ public class CaptureActivity extends AppCompatActivity implements SurfaceHolder.
      * @param flashState 切换闪光灯图片
      */
     public void switchFlashImg(int flashState) {
-
         if (flashState == ZxingConstant.FLASH_OPEN) {
             flashLightIv.setImageResource(R.drawable.ic_open);
             flashLightTv.setText("关闭闪光灯");
@@ -184,24 +179,18 @@ public class CaptureActivity extends AppCompatActivity implements SurfaceHolder.
             flashLightIv.setImageResource(R.drawable.ic_close);
             flashLightTv.setText("打开闪光灯");
         }
-
     }
 
     /**
      * @param rawResult 返回的扫描结果
      */
     public void handleDecode(Result rawResult) {
-
         inactivityTimer.onActivity();
-
         beepManager.playBeepSoundAndVibrate();
-
         Intent intent = getIntent();
         intent.putExtra(ZxingConstant.CODED_CONTENT, rawResult.getText());
         setResult(RESULT_OK, intent);
         this.finish();
-
-
     }
 
 
@@ -219,13 +208,11 @@ public class CaptureActivity extends AppCompatActivity implements SurfaceHolder.
         super.onResume();
 
         cameraManager = new CameraManager(getApplication(), config);
-
         viewfinderView.setCameraManager(cameraManager);
         handler = null;
 
         surfaceHolder = previewView.getHolder();
         if (hasSurface) {
-
             initCamera(surfaceHolder);
         } else {
             // 重置callback，等待surfaceCreated()来初始化camera
@@ -280,7 +267,6 @@ public class CaptureActivity extends AppCompatActivity implements SurfaceHolder.
         cameraManager.closeDriver();
 
         if (!hasSurface) {
-
             surfaceHolder.removeCallback(this);
         }
         super.onPause();
@@ -307,14 +293,11 @@ public class CaptureActivity extends AppCompatActivity implements SurfaceHolder.
     }
 
     @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width,
-                               int height) {
-
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
     }
 
     @Override
     public void onClick(View view) {
-
         int id = view.getId();
         if (id == R.id.flashLightLayout) {
             /*切换闪光灯*/
@@ -328,8 +311,6 @@ public class CaptureActivity extends AppCompatActivity implements SurfaceHolder.
         } else if (id == R.id.backIv) {
             finish();
         }
-
-
     }
 
 
@@ -351,8 +332,6 @@ public class CaptureActivity extends AppCompatActivity implements SurfaceHolder.
                     Toast.makeText(CaptureActivity.this, "抱歉，解析失败,换个图片试试.", Toast.LENGTH_SHORT).show();
                 }
             }).run();
-
-
         }
     }
 

@@ -52,18 +52,13 @@ public final class ViewfinderView extends View {
     private ValueAnimator valueAnimator;
     private Rect frame;
 
-
     public ViewfinderView(Context context) {
         this(context, null);
-
     }
 
     public ViewfinderView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
-
-
     }
-
 
     public void setZxingConfig(ZxingOptions config) {
         this.config = config;
@@ -75,9 +70,7 @@ public final class ViewfinderView extends View {
 
         scanLineColor = ContextCompat.getColor(getContext(), config.getScanLineColor());
         initPaint();
-
     }
-
 
     public ViewfinderView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -88,8 +81,6 @@ public final class ViewfinderView extends View {
 
         possibleResultPoints = new ArrayList<ResultPoint>(10);
         lastPossibleResultPoints = null;
-
-
     }
 
     private void initPaint() {
@@ -102,15 +93,12 @@ public final class ViewfinderView extends View {
         reactPaint.setStrokeWidth(dp2px(1));
 
         /*边框线画笔*/
-
         if (frameLineColor != -1) {
             frameLinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             frameLinePaint.setColor(ContextCompat.getColor(getContext(), config.getFrameLineColor()));
             frameLinePaint.setStrokeWidth(dp2px(1));
             frameLinePaint.setStyle(Paint.Style.STROKE);
         }
-
-
 
         /*扫描线画笔*/
         scanLinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -122,39 +110,27 @@ public final class ViewfinderView extends View {
     }
 
     private void initAnimator() {
-
         if (valueAnimator == null) {
             valueAnimator = ValueAnimator.ofInt(frame.top, frame.bottom);
             valueAnimator.setDuration(3000);
             valueAnimator.setInterpolator(new DecelerateInterpolator());
             valueAnimator.setRepeatMode(ValueAnimator.RESTART);
             valueAnimator.setRepeatCount(ValueAnimator.INFINITE);
-            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-
-                    scanLineTop = (int) animation.getAnimatedValue();
-                    invalidate();
-
-                }
+            valueAnimator.addUpdateListener(animation -> {
+                scanLineTop = (int) animation.getAnimatedValue();
+                invalidate();
             });
-
             valueAnimator.start();
         }
-
-
     }
 
     public void setCameraManager(CameraManager cameraManager) {
         this.cameraManager = cameraManager;
-
-
     }
 
     @SuppressLint("DrawAllocation")
     @Override
     public void onDraw(Canvas canvas) {
-
         if (cameraManager == null) {
             return;
         }
@@ -187,8 +163,9 @@ public final class ViewfinderView extends View {
             drawScanLight(canvas, frame);
 
             /*绘制闪动的点*/
-            // drawPoint(canvas, frame, previewFrame);
+//             drawPoint(canvas, frame, previewFrame);
         }
+
     }
 
     private void drawPoint(Canvas canvas, Rect frame, Rect previewFrame) {
@@ -260,12 +237,10 @@ public final class ViewfinderView extends View {
      * @param frame
      */
     private void drawFrameBounds(Canvas canvas, Rect frame) {
-
         /*扫描框的边框线*/
         if (frameLineColor != -1) {
             canvas.drawRect(frame, frameLinePaint);
         }
-
 
         /*四个角的长度和宽度*/
         int width = frame.width();
@@ -277,25 +252,28 @@ public final class ViewfinderView extends View {
 
         /*角在线外*/
         // 左上角
-        canvas.drawRect(frame.left - corWidth, frame.top, frame.left, frame.top
-                + corLength, reactPaint);
-        canvas.drawRect(frame.left - corWidth, frame.top - corWidth, frame.left
-                + corLength, frame.top, reactPaint);
+        canvas.drawRect(frame.left - corWidth, frame.top,
+                frame.left, frame.top + corLength, reactPaint);
+        canvas.drawRect(frame.left - corWidth, frame.top - corWidth,
+                frame.left + corLength, frame.top, reactPaint);
+
         // 右上角
         canvas.drawRect(frame.right, frame.top, frame.right + corWidth,
                 frame.top + corLength, reactPaint);
         canvas.drawRect(frame.right - corLength, frame.top - corWidth,
                 frame.right + corWidth, frame.top, reactPaint);
+
         // 左下角
         canvas.drawRect(frame.left - corWidth, frame.bottom - corLength,
                 frame.left, frame.bottom, reactPaint);
-        canvas.drawRect(frame.left - corWidth, frame.bottom, frame.left
-                + corLength, frame.bottom + corWidth, reactPaint);
+        canvas.drawRect(frame.left - corWidth, frame.bottom,
+                frame.left + corLength, frame.bottom + corWidth, reactPaint);
+
         // 右下角
-        canvas.drawRect(frame.right, frame.bottom - corLength, frame.right
-                + corWidth, frame.bottom, reactPaint);
-        canvas.drawRect(frame.right - corLength, frame.bottom, frame.right
-                + corWidth, frame.bottom + corWidth, reactPaint);
+        canvas.drawRect(frame.right, frame.bottom - corLength,
+                frame.right + corWidth, frame.bottom, reactPaint);
+        canvas.drawRect(frame.right - corLength, frame.bottom,
+                frame.right + corWidth, frame.bottom + corWidth, reactPaint);
     }
 
 
@@ -306,10 +284,7 @@ public final class ViewfinderView extends View {
      * @param frame
      */
     private void drawScanLight(Canvas canvas, Rect frame) {
-
         canvas.drawLine(frame.left, scanLineTop, frame.right, scanLineTop, scanLinePaint);
-
-
     }
 
     public void drawViewfinder() {

@@ -34,8 +34,7 @@ import com.zxing.android.view.ViewfinderResultPointCallback;
  */
 public final class CaptureActivityHandler extends Handler {
 
-    private static final String TAG = CaptureActivityHandler.class
-            .getSimpleName();
+    private static final String TAG = CaptureActivityHandler.class.getSimpleName();
 
     private final CaptureActivity activity;
     private final DecodeThread decodeThread;
@@ -65,26 +64,19 @@ public final class CaptureActivityHandler extends Handler {
         switch (message.what) {
             case ZxingConstant.RESTART_PREVIEW:
                 // 重新预览
-
                 restartPreviewAndDecode();
                 break;
             case ZxingConstant.DECODE_SUCCEEDED:
                 // 解码成功
-
                 state = State.SUCCESS;
                 activity.handleDecode((Result) message.obj);
-
                 break;
             case ZxingConstant.DECODE_FAILED:
-
                 // 尽可能快的解码，以便可以在解码失败时，开始另一次解码
-
                 state = State.PREVIEW;
-                cameraManager.requestPreviewFrame(decodeThread.getHandler(),
-                        ZxingConstant.DECODE);
+                cameraManager.requestPreviewFrame(decodeThread.getHandler(), ZxingConstant.DECODE);
                 break;
             case ZxingConstant.RETURN_SCAN_RESULT:
-
                 activity.setResult(Activity.RESULT_OK, (Intent) message.obj);
                 activity.finish();
                 break;
@@ -122,8 +114,7 @@ public final class CaptureActivityHandler extends Handler {
     public void restartPreviewAndDecode() {
         if (state == State.SUCCESS) {
             state = State.PREVIEW;
-            cameraManager.requestPreviewFrame(decodeThread.getHandler(),
-                    ZxingConstant.DECODE);
+            cameraManager.requestPreviewFrame(decodeThread.getHandler(), ZxingConstant.DECODE);
             activity.drawViewfinder();
         }
     }

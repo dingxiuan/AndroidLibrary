@@ -126,8 +126,4 @@ public class BasicWebViewActivity<P extends ActivityPresenter> extends SuperActi
         return extras != null ? extras.get(key) : null;
     }
 
-    @Override
-    public Resources getResources() {
-        return getContext().getResources();
-    }
 }

@@ -57,12 +57,12 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerAdapter.ViewHolder>
     public abstract VH onCreateViewHolder(LayoutInflater inflater, @NonNull ViewGroup parent, int viewType);
 
     @Override
-    public void onBindViewHolder(VH holder, int position) {
+    public final void onBindViewHolder(VH holder, int position) {
         holder.setData(getItem(position), position, listener);
     }
 
     @Override
-    public void onBindViewHolder(VH holder, int position, List<Object> payloads) {
+    public final void onBindViewHolder(VH holder, int position, List<Object> payloads) {
         super.onBindViewHolder(holder, position, payloads);
     }
 
@@ -90,8 +90,9 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerAdapter.ViewHolder>
         return inflater;
     }
 
+
     @SuppressWarnings("unchecked")
-    protected <V extends View> V getView(@LayoutRes int resId, ViewGroup parent) {
+    protected <V extends View> V inflateView(@LayoutRes int resId, ViewGroup parent) {
         return (V) getInflater().inflate(resId, parent, false);
     }
 
@@ -272,7 +273,7 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerAdapter.ViewHolder>
     }
 
 
-    public static class ViewHolder<T> extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class ViewHolder<T> extends RecyclerView.ViewHolder {
 
         private OnItemClickListener<T> listener;
         private T item;
@@ -280,7 +281,11 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerAdapter.ViewHolder>
 
         public ViewHolder(View itemView) {
             super(itemView);
-            itemView.setOnClickListener(this);
+            itemView.setOnClickListener(v -> {
+                if (listener != null) {
+                    listener.onItemClick(v, item, position);
+                }
+            });
         }
 
         public void setListener(OnItemClickListener<T> listener) {
@@ -304,12 +309,6 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerAdapter.ViewHolder>
             // ~
         }
 
-        @Override
-        public void onClick(View v) {
-            if (listener != null) {
-                listener.onItemClick(v, item, position);
-            }
-        }
     }
 
 }

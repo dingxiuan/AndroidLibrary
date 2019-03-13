@@ -160,12 +160,8 @@ class PreferenceImpl implements IPreference {
 
     @Override
     public List<String> getAll(String key) {
-        List<String> list = new ArrayList<String>();
         Set<String> set = getStringSet(key);
-        for (String value : set) {
-            list.add(value);
-        }
-        return list;
+        return new ArrayList<>(set);
     }
 
     @Override
