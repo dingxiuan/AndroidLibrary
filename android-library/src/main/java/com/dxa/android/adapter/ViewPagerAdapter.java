@@ -1,8 +1,9 @@
 package com.dxa.android.adapter;
 
-import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.viewpager.widget.PagerAdapter;
 
 import java.util.Collection;
 import java.util.List;

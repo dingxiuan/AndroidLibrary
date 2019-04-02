@@ -235,7 +235,7 @@ class PreferenceImpl implements IPreference {
 
     @Override
     public Set<String> getStringSet(String key) {
-        return getPreferences().getStringSet(key, null);
+        return getPreferences().getStringSet(key, new HashSet<>());
     }
 
     @Override

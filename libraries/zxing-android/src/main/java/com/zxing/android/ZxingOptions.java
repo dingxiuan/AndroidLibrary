@@ -1,7 +1,8 @@
 package com.zxing.android;
 
-import android.support.annotation.ColorRes;
 
+
+import androidx.annotation.ColorRes;
 
 import java.io.Serializable;
 

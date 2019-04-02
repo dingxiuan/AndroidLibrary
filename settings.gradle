@@ -4,7 +4,7 @@ include ':android-utils'
 
 include ':libraries:js-bridge'
 include ':libraries:zxing-android'
-include ':libraries:material-datepicker'
+//include ':libraries:material-datepicker'
 
-include ':samples:ecg-draw', ':samples:wave-draw'
+//include ':samples:ecg-draw', ':samples:wave-draw'
 

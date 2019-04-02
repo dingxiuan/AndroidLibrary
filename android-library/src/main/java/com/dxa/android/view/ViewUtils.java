@@ -2,12 +2,13 @@ package com.dxa.android.view;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.annotation.IdRes;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.annotation.IdRes;
 
 public class ViewUtils {
 

@@ -2,7 +2,8 @@ package com.dxa.android.ui;
 
 import android.content.Context;
 import android.os.Handler;
-import android.support.annotation.StringRes;
+
+import androidx.annotation.StringRes;
 
 import com.dxa.android.logger.DLogger;
 import com.dxa.android.logger.LogLevel;

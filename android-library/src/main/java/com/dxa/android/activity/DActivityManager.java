@@ -5,7 +5,8 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
+
+import androidx.annotation.RequiresApi;
 
 import com.dxa.android.logger.DLogger;
 import com.dxa.android.logger.LogLevel;

@@ -3,7 +3,8 @@ package com.dxa.android.service;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
+
+import androidx.annotation.Nullable;
 
 import com.dxa.android.logger.DLogger;
 import com.dxa.android.logger.LogLevel;

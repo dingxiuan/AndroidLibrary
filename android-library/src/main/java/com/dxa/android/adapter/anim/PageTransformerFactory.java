@@ -1,6 +1,7 @@
 package com.dxa.android.adapter.anim;
 
-import android.support.v4.view.ViewPager;
+
+import androidx.viewpager.widget.ViewPager;
 
 /**
  * 生成动画的工厂类

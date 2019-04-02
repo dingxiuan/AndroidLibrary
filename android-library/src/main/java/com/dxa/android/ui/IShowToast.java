@@ -1,6 +1,7 @@
 package com.dxa.android.ui;
 
-import android.support.annotation.StringRes;
+
+import androidx.annotation.StringRes;
 
 /**
  * 显示Toast

@@ -1,14 +1,15 @@
 package com.dxa.android.adapter.anim;
 
-import android.support.annotation.NonNull;
-import android.support.v4.view.ViewPager.PageTransformer;
 import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.viewpager.widget.ViewPager;
 
 /**
  * @description: 这个Page Transformer使用默认动画的屏幕左滑动画。但是为右滑使用一种“潜藏”效
  * 果的动画。潜藏动画将page淡出，并且线性缩小它。
  */
-class DepthPageTransformer implements PageTransformer {
+class DepthPageTransformer implements ViewPager.PageTransformer {
     private static final float MIN_SCALE = 0.75f;
 
     @Override

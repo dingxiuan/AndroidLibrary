@@ -1,14 +1,15 @@
 package com.dxa.android.adapter.anim;
 
-import android.support.annotation.NonNull;
-import android.support.v4.view.ViewPager.PageTransformer;
 import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.viewpager.widget.ViewPager;
 
 /**
  * @description: 当在相邻界面滑动时，这个Page Transformer使页面收缩并褪色。
  * 当页面越靠近中心，它将渐渐还原到正常大小并且图像渐入。
  */
-class ZoomOutPageTransformer implements PageTransformer {
+class ZoomOutPageTransformer implements ViewPager.PageTransformer {
 
     private static final float MIN_SCALE = 0.85f;
     private static final float MIN_ALPHA = 0.5f;
