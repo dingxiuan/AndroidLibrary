@@ -1,7 +1,7 @@
-package com.dxa.common.encrypt;
+package com.dxa.benefit.encrypt;
 
 
-import com.dxa.common.hex.HexTool;
+import com.dxa.benefit.hex.HexTool;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -10,7 +10,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.Locale;
 
-import static com.dxa.common.hex.HexTool.binToHex;
+import static com.dxa.benefit.hex.HexTool.binToHex;
 
 public class SecretHelper {
     private static final String _HEX = "0123456789ABCDEF";

@@ -1,4 +1,4 @@
-package com.dxa.common.http;
+package com.dxa.benefit.http;
 
 /**
  * Http的状态码

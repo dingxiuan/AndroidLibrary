@@ -1,4 +1,4 @@
-package com.dxa.common.hex;
+package com.dxa.benefit.hex;
 
 /**
  * 16进制转换

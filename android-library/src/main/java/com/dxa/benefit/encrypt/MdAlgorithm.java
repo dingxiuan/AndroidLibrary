@@ -1,4 +1,4 @@
-package com.dxa.common.encrypt;
+package com.dxa.benefit.encrypt;
 
 /**
  * 消息摘要算法名称

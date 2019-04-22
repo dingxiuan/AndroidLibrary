@@ -219,7 +219,9 @@ public abstract class SuperFragment<P extends IFragmentPresenter> extends Fragme
             intent = new Intent();
         }
         intent.setClass(requireActivity(), clazz);
-        intent.putExtras(bundle);
+        if (bundle != null) {
+            intent.putExtras(bundle);
+        }
         super.startActivity(intent);
     }
 

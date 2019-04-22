@@ -1,4 +1,4 @@
-package com.dxa.common;
+package com.dxa.benefit;
 
 import java.io.File;
 import java.util.ArrayList;

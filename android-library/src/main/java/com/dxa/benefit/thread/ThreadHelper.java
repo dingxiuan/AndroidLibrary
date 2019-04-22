@@ -1,4 +1,4 @@
-package com.dxa.common.thread;
+package com.dxa.benefit.thread;
 
 import java.util.concurrent.TimeUnit;
 

@@ -1,4 +1,4 @@
-package com.dxa.common.file;
+package com.dxa.benefit.file;
 
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;

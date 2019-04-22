@@ -125,38 +125,38 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerAdapter.ViewHolder>
     }
 
     @Override
-    public boolean addAll(T[] ts) {
-        return !(ts == null || ts.length < 1) && addAll(Arrays.asList(ts));
+    public boolean addAll(T[] array) {
+        return !(array == null || array.length < 1) && addAll(Arrays.asList(array));
     }
 
     /**
      * 添加一个集合的数据
      *
-     * @param list 集合
+     * @param c 集合
      * @return 是否添加
      */
     @Override
-    public boolean addAll(Collection<T> list) {
-        if (list == null || list.isEmpty()) {
+    public boolean addAll(Collection<T> c) {
+        if (c == null || c.isEmpty()) {
             return false;
         }
 
         if (!repeat) {
             ArrayList<T> tempList = new ArrayList<>();
-            for (T t : list) {
+            for (T t : c) {
                 if (!contains(t)) {
                     tempList.add(t);
                 }
             }
-            list = tempList;
+            c = tempList;
 
-            if (list.isEmpty()) {
+            if (c.isEmpty()) {
                 return false;
             }
         }
         int itemCount = getCount();
-        int size = list.size();
-        boolean add = items.addAll(list);
+        int size = c.size();
+        boolean add = items.addAll(c);
         notifyItemRangeInserted(itemCount, size);
         return add;
     }
@@ -186,7 +186,7 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerAdapter.ViewHolder>
      */
     @Override
     public boolean remove(int from, int to) {
-        if (from > to && contains(from) && contains(to)) {
+        if (from < to && contains(from) && contains(to)) {
             ArrayList<T> removedList = new ArrayList<>();
             for (int i = from; i < to; i++) {
                 removedList.add(items.get(i));
@@ -217,12 +217,12 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerAdapter.ViewHolder>
     /**
      * 此位置上是否包含对象
      *
-     * @param position 对象的位置
+     * @param index 对象的位置
      * @return 包含返回true，否则false
      */
     @Override
-    public boolean contains(int position) {
-        return position >= 0 && getCount() > position;
+    public boolean contains(int index) {
+        return index >= 0 && getCount() > index;
     }
 
     /**

@@ -1,4 +1,4 @@
-package com.dxa.common;
+package com.dxa.benefit;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

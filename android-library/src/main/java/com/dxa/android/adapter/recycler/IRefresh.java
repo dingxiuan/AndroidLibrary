@@ -31,15 +31,15 @@ public interface IRefresh<T> {
     /**
      * 添加数组
      */
-    boolean addAll(T[] ts);
+    boolean addAll(T[] array);
 
     /**
      * 添加一个集合的数据
      *
-     * @param list 集合
+     * @param c 集合
      * @return 是否添加
      */
-    boolean addAll(Collection<T> list);
+    boolean addAll(Collection<T> c);
 
     /**
      * 移除

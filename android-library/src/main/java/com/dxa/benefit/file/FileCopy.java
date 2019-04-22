@@ -1,7 +1,7 @@
-package com.dxa.common.file;
+package com.dxa.benefit.file;
 
 
-import com.dxa.common.Checker;
+import com.dxa.benefit.Checker;
 
 import java.io.Closeable;
 import java.io.File;

@@ -1,4 +1,4 @@
-package com.dxa.common;
+package com.dxa.benefit;
 
 /**
  * 数据校验

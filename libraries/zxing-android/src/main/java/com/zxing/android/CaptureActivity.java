@@ -174,10 +174,10 @@ public class CaptureActivity extends AppCompatActivity implements SurfaceHolder.
      */
     public void switchFlashImg(int flashState) {
         if (flashState == ZxingConstant.FLASH_OPEN) {
-            flashLightIv.setImageResource(R.drawable.ic_open);
+            flashLightIv.setImageResource(R.drawable.qr_ic_open);
             flashLightTv.setText("关闭闪光灯");
         } else {
-            flashLightIv.setImageResource(R.drawable.ic_close);
+            flashLightIv.setImageResource(R.drawable.qr_ic_close);
             flashLightTv.setText("打开闪光灯");
         }
     }

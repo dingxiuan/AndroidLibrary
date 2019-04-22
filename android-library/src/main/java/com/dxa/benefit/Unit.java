@@ -1,4 +1,4 @@
-package com.dxa.common;
+package com.dxa.benefit;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
