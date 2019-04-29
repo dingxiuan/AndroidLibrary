@@ -16,7 +16,7 @@ public interface IRefresh<T> {
     /**
      * 获得所有的Item
      */
-    List<T> getItems();
+    List<T> getAll();
 
     /**
      * 根据位置获得Item
