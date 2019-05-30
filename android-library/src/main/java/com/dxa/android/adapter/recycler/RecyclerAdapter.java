@@ -1,6 +1,7 @@
 package com.dxa.android.adapter.recycler;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -278,7 +279,8 @@ public abstract class RecyclerAdapter<T, VH extends RecyclerAdapter.ViewHolder<T
         private OnItemClickListener<T> listener;
         private T item;
         private int position;
-        private Context context;
+        public Context context;
+        public Resources resources;
 
         public ViewHolder(View itemView) {
             super(itemView);

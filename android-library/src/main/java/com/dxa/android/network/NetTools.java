@@ -7,6 +7,7 @@ import android.net.NetworkInfo;
 /**
  * 网络工具类
  */
+@Deprecated
 public class NetTools {
 
     private NetTools() {
