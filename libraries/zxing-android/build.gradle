@@ -3,5 +3,5 @@ apply plugin: 'com.android.library'
 apply from: "${rootDir}/buildSystem/AndroidConfig.gradle"
 
 dependencies {
-    implementation "com.google.zxing:core:3.3.3"
+    implementation "com.google.zxing:core:3.4.0"
 }
