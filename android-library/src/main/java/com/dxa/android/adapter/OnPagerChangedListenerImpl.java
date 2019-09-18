@@ -9,31 +9,31 @@ import androidx.viewpager.widget.ViewPager;
  */
 public class OnPagerChangedListenerImpl implements ViewPager.OnPageChangeListener {
 
-    protected PagerAdapter adapter;
+	protected PagerAdapter adapter;
 
-    public OnPagerChangedListenerImpl() {
-    }
+	public OnPagerChangedListenerImpl() {
+	}
 
-    public OnPagerChangedListenerImpl(PagerAdapter adapter) {
-        this.adapter = adapter;
-    }
+	public OnPagerChangedListenerImpl(PagerAdapter adapter) {
+		this.adapter = adapter;
+	}
 
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+	@Override
+	public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-    }
+	}
 
-    @Override
-    public void onPageSelected(int position) {
+	@Override
+	public void onPageSelected(int position) {
 
-    }
+	}
 
-    @Override
-    public void onPageScrollStateChanged(int state) {
+	@Override
+	public void onPageScrollStateChanged(int state) {
 
-    }
+	}
 
-    public PagerAdapter getAdapter() {
-        return adapter;
-    }
+	public PagerAdapter getAdapter() {
+		return adapter;
+	}
 }

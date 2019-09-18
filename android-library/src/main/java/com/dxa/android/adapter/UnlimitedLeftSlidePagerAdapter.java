@@ -9,29 +9,29 @@ import java.util.List;
  */
 class UnlimitedLeftSlidePagerAdapter<V extends View> extends ViewPagerAdapter<V> {
 
-    public UnlimitedLeftSlidePagerAdapter(List<V> views) {
-        super(views);
-    }
+	public UnlimitedLeftSlidePagerAdapter(List<V> views) {
+		super(views);
+	}
 
-    public UnlimitedLeftSlidePagerAdapter(List<V> views, List<? extends CharSequence> titles) {
-        super(views, titles);
-    }
+	public UnlimitedLeftSlidePagerAdapter(List<V> views, List<? extends CharSequence> titles) {
+		super(views, titles);
+	}
 
-    @Override
-    public int getCount() {
-        return Integer.MAX_VALUE;
-    }
+	@Override
+	public int getCount() {
+		return Integer.MAX_VALUE;
+	}
 
-    @Override
-    public CharSequence getPageTitle(int position) {
-        position %= getTitleSize();
-        return super.getPageTitle(position);
-    }
+	@Override
+	public CharSequence getPageTitle(int position) {
+		position %= getTitleSize();
+		return super.getPageTitle(position);
+	}
 
-    @Override
-    public V getItemView(int position) {
-        position %= getViewSize();
-        return super.getItemView(position);
-    }
+	@Override
+	public V getItemView(int position) {
+		position %= getViewSize();
+		return super.getItemView(position);
+	}
 
 }
